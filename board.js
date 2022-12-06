@@ -113,9 +113,11 @@ class Board {
 				$("#preview-piece").show();
 				if (obj) {
 					$("#preview-piece").attr("src", obj.getImage());
-					$("#preview-piece").css("left", x * 40 + "px");
-					$("#preview-piece").css("top", y * 40 + "px");
+				} else if (type === "flag") {
+					$("#preview-piece").attr("src", "images/flag.png");
 				}
+				$("#preview-piece").css("left", x * 40 + "px");
+				$("#preview-piece").css("top", y * 40 + "px");
 			} else if (obj) {
 				self.highlightMoves(obj, x, y);
 				$("#preview-piece").show();
