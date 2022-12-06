@@ -111,9 +111,11 @@ class Board {
 			if (self.board[y][x].isClicked()) {
 				self.highlightMoves(self.board[y][x].piece, x, y);
 				$("#preview-piece").show();
-				$("#preview-piece").attr("src", obj.getImage());
-				$("#preview-piece").css("left", x * 40 + "px");
-				$("#preview-piece").css("top", y * 40 + "px");
+				if (obj) {
+					$("#preview-piece").attr("src", obj.getImage());
+					$("#preview-piece").css("left", x * 40 + "px");
+					$("#preview-piece").css("top", y * 40 + "px");
+				}
 			} else if (obj) {
 				self.highlightMoves(obj, x, y);
 				$("#preview-piece").show();
@@ -220,7 +222,11 @@ class Board {
 			$("#board").append(flagImage);
 
 			const self = this;
+			$(`#${x}-${y}`).off("mouseup");
 			$(`#${x}-${y}`).on("mouseup", function () {
+				if ($("#flag").children(".piece-img").hasClass("selected-piece")) {
+					return;
+				}
 				cell.setFlag(false);
 				flagImage.remove();
 				self.pieces.flag++;
@@ -257,7 +263,7 @@ class Board {
 		}
 
 		for (const m of this.mines) {
-			if (!this.board[m.y][m.x].isFlagged()) {
+			if (!m.isFlagged()) {
 				return;
 			}
 		}
