@@ -15,10 +15,43 @@
 		></script>
 
 		<script src="cell.js"></script>
+		<script src="piece.js"></script>
 		<script src="board.js"></script>
 		<script src="index.js"></script>
 	</head>
 	<body>
-		<div id="board"></div>
+		<div id="game-wrap">
+			<div id="board"></div>
+			<div id="piece-holder">
+				<div class="piece" id="pawn">
+					<img class="piece-img" src="./images/white-pawn.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="knight">
+					<img class="piece-img" src="./images/white-knight.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="bishop">
+					<img class="piece-img" src="./images/white-bishop.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="rook">
+					<img class="piece-img" src="./images/white-rook.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="queen">
+					<img class="piece-img" src="./images/white-queen.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="king">
+					<img class="piece-img" src="./images/white-king.png" />
+					<p class="piece-counter">0</p>
+				</div>
+				<div class="piece" id="flag">
+					<img class="piece-img" src="./images/flag.png" />
+					<p class="piece-counter">0</p>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

@@ -4,7 +4,7 @@ class Cell {
 		this.y = y;
 		this.mine = false;
 		this.flagged = false;
-		this.clicked = false;
+		this.piece;
 	}
 
 	isMine() {
@@ -16,14 +16,25 @@ class Cell {
 	}
 
 	isClicked() {
-		return this.clicked();
+		return this.piece !== undefined;
 	}
 
 	setMine(status) {
 		this.mine = status;
 	}
 
-	flag() {}
+	setFlag(status) {
+		this.flagged = status;
+	}
 
-	click() {}
+	click(piece) {
+		this.piece = piece;
+	}
+
+	getMineCount(board) {
+		if (!this.piece) {
+			return 0;
+		}
+		return this.piece.getMineCount(board);
+	}
 }
