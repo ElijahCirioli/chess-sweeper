@@ -108,7 +108,13 @@ class Board {
 			const x = parseInt(coords[0]);
 			const y = parseInt(coords[1]);
 
-			if (obj) {
+			if (self.board[y][x].isClicked()) {
+				self.highlightMoves(self.board[y][x].piece, x, y);
+				$("#preview-piece").show();
+				$("#preview-piece").attr("src", obj.getImage());
+				$("#preview-piece").css("left", x * 40 + "px");
+				$("#preview-piece").css("top", y * 40 + "px");
+			} else if (obj) {
 				self.highlightMoves(obj, x, y);
 				$("#preview-piece").show();
 				$("#preview-piece").attr("src", obj.getImage());
@@ -141,6 +147,19 @@ class Board {
 	ungrabPiece() {
 		$("#preview-piece").hide();
 		$(".cell").off("click mouseover");
+
+		const self = this;
+		$(".cell").on("mouseover", function () {
+			const coords = $(this).attr("id").split("-");
+			const x = parseInt(coords[0]);
+			const y = parseInt(coords[1]);
+
+			if (self.board[y][x].isClicked()) {
+				self.highlightMoves(self.board[y][x].piece, x, y);
+			} else {
+				$(".cell").removeClass("highlight");
+			}
+		});
 		$(".cell").removeClass("highlight");
 		$(".piece-img").css("background", "none");
 		$(".piece-img").removeClass("selected-piece");
@@ -150,7 +169,7 @@ class Board {
 		$(".cell").removeClass("highlight");
 		piece.move(x, y);
 
-		if (this.board[y][x].isClicked() || this.board[y][x].isFlagged()) {
+		if (this.board[y][x].isFlagged()) {
 			return;
 		}
 		const moves = piece.getMoves(this.board);
