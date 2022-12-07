@@ -53,7 +53,7 @@ class Piece {
 class Pawn extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-pawn.png";
+		this.image = "./images/pawn.png";
 	}
 
 	getMoves(board) {
@@ -88,7 +88,7 @@ class Pawn extends Piece {
 class Knight extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-knight.png";
+		this.image = "./images/knight.png";
 	}
 
 	getMoves(board) {
@@ -125,7 +125,7 @@ class Knight extends Piece {
 class Bishop extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-bishop.png";
+		this.image = "./images/bishop.png";
 	}
 
 	getMoves(board) {
@@ -162,7 +162,7 @@ class Bishop extends Piece {
 class Rook extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-rook.png";
+		this.image = "./images/rook.png";
 	}
 
 	getMoves(board) {
@@ -203,7 +203,7 @@ class Rook extends Piece {
 class King extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-king.png";
+		this.image = "./images/king.png";
 	}
 
 	getMoves(board) {
@@ -239,7 +239,7 @@ class King extends Piece {
 class Queen extends Piece {
 	constructor(x, y, size, board) {
 		super(x, y, size, board);
-		this.image = "./images/white-queen.png";
+		this.image = "./images/queen.png";
 	}
 
 	getMoves(board) {

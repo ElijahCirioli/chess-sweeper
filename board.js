@@ -116,20 +116,21 @@ class Board {
 				} else if (type === "flag") {
 					$("#preview-piece").attr("src", "images/flag.png");
 				}
-				$("#preview-piece").css("left", x * 40 + "px");
-				$("#preview-piece").css("top", y * 40 + "px");
+				$("#preview-piece").css("left", x * 40 + 1 + "px");
+				$("#preview-piece").css("top", y * 40 + 1 + "px");
 			} else if (obj) {
 				self.highlightMoves(obj, x, y);
 				$("#preview-piece").show();
 				$("#preview-piece").attr("src", obj.getImage());
 
-				$("#preview-piece").css("left", x * 40 + "px");
-				$("#preview-piece").css("top", y * 40 + "px");
+				$("#preview-piece").css("left", x * 40 + 1 + "px");
+				$("#preview-piece").css("top", y * 40 + 1 + "px");
 			} else if (type === "flag") {
+				$(".cell").removeClass("highlight");
 				$("#preview-piece").show();
 				$("#preview-piece").attr("src", "images/flag.png");
-				$("#preview-piece").css("left", x * 40 + "px");
-				$("#preview-piece").css("top", y * 40 + "px");
+				$("#preview-piece").css("left", x * 40 + 1 + "px");
+				$("#preview-piece").css("top", y * 40 + 1 + "px");
 			} else {
 				$("#preview-piece").hide();
 			}
@@ -194,8 +195,8 @@ class Board {
 			cell.click(piece);
 			const pieceImage = $(`<img class="piece-img cell-piece" />`);
 			pieceImage.attr("src", piece.getImage());
-			pieceImage.css("left", x * 40 + "px");
-			pieceImage.css("top", y * 40 + "px");
+			pieceImage.css("left", x * 40 + 1 + "px");
+			pieceImage.css("top", y * 40 + 1 + "px");
 			$("#board").append(pieceImage);
 
 			const type = piece.getType();
@@ -219,8 +220,8 @@ class Board {
 			const flagImage = $(
 				`<img id="flag-${x}-${y}" class="piece-img cell-piece" src="images/flag.png"/>`
 			);
-			flagImage.css("left", x * 40 + "px");
-			flagImage.css("top", y * 40 + "px");
+			flagImage.css("left", x * 40 + 1 + "px");
+			flagImage.css("top", y * 40 + 1 + "px");
 			$("#board").append(flagImage);
 
 			const self = this;
@@ -252,8 +253,8 @@ class Board {
 				}
 
 				const text = $(`<p class="mine-count">${count}</p>`);
-				text.css("left", x * 40 + "px");
-				text.css("top", y * 40 + "px");
+				text.css("left", x * 40 + 1 + "px");
+				text.css("top", y * 40 + 1 + "px");
 				$("#board").append(text);
 			}
 		}
