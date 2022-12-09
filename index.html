@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Chess-Sweeper</title>
+		<title>Chess Sweeper</title>
 
 		<link href="style.css" rel="stylesheet" type="text/css" media="all" />
 
@@ -14,42 +14,54 @@
 			crossorigin="anonymous"
 		></script>
 
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&family=Martian+Mono&display=swap"
+			rel="stylesheet"
+		/>
+
 		<script src="cell.js"></script>
 		<script src="piece.js"></script>
-		<script src="board.js"></script>
-		<script src="index.js"></script>
+		<script src="game.js"></script>
 	</head>
 	<body>
-		<div id="game-wrap">
-			<div id="board"></div>
-			<div id="piece-holder">
-				<div class="piece" id="pawn">
-					<img class="piece-img" src="./images/pawn.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="knight">
-					<img class="piece-img" src="./images/knight.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="bishop">
-					<img class="piece-img" src="./images/bishop.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="rook">
-					<img class="piece-img" src="./images/rook.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="queen">
-					<img class="piece-img" src="./images/queen.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="king">
-					<img class="piece-img" src="./images/king.png" />
-					<p class="piece-counter">0</p>
-				</div>
-				<div class="piece" id="flag">
-					<img class="piece-img" src="./images/flag.png" />
-					<p class="piece-counter">0</p>
+		<div id="title-wrap">
+			<h1 id="title">Chess Sweeper</h1>
+			<div id="title-end-cap"></div>
+		</div>
+		<div id="content-wrap">
+			<div id="game-wrap">
+				<div id="board"></div>
+				<div id="piece-selection-wrap">
+					<div class="piece-selection" id="piece-selection-pawn">
+						<img class="piece-selection-image" src="./images/pawn.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-knight">
+						<img class="piece-selection-image" src="./images/knight.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-bishop">
+						<img class="piece-selection-image" src="./images/bishop.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-rook">
+						<img class="piece-selection-image" src="./images/rook.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-queen">
+						<img class="piece-selection-image" src="./images/queen.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-king">
+						<img class="piece-selection-image" src="./images/king.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
+					<div class="piece-selection" id="piece-selection-flag">
+						<img class="piece-selection-image" src="./images/flag.png" />
+						<p class="piece-selection-counter">0</p>
+					</div>
 				</div>
 			</div>
 		</div>

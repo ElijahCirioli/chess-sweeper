@@ -1,40 +1,22 @@
 class Cell {
-	constructor(x, y) {
+	constructor(x, y, size) {
 		this.x = x;
 		this.y = y;
-		this.mine = false;
-		this.flagged = false;
-		this.piece;
+		this.size = size;
+
+		this.hasMine = false;
+		this.hasFlag = false;
+		this.hasPiece = false;
+		this.marking = 0;
+
+		this.generateElement();
 	}
 
-	isMine() {
-		return this.mine;
-	}
-
-	isFlagged() {
-		return this.flagged;
-	}
-
-	isClicked() {
-		return this.piece !== undefined;
-	}
-
-	setMine(status) {
-		this.mine = status;
-	}
-
-	setFlag(status) {
-		this.flagged = status;
-	}
-
-	click(piece) {
-		this.piece = piece;
-	}
-
-	getMineCount(board) {
-		if (!this.piece) {
-			return 0;
+	generateElement() {
+		let cellClass = "cell";
+		if ((this.x + this.y) % 2 === 0) {
+			cellClass += " light";
 		}
-		return this.piece.getMineCount(board);
+		$("#board").append(`<div class="${cellClass}"></div>`);
 	}
 }
