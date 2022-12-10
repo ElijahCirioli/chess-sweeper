@@ -73,6 +73,47 @@ function setupEventListeners() {
 		$(this).addClass("selected");
 		$("#preview-piece").attr("src", `images/${selectedPiece}.png`);
 		$(".cell").css("cursor", "pointer");
+		$("#note-buttons-wrap").css("visibility", "hidden");
+		$("#note-buttons-wrap").children().removeClass("selected");
+		$("#note-button").show();
+	});
+
+	// unselect piece when clicking background
+	$("body").on("click", function (e) {
+		if (e.target === e.currentTarget || $(e.target).attr("id") === "title-wrap") {
+			$(".piece-selection").removeClass("selected");
+			$(".cell").css("cursor", "default");
+			$("#preview-piece").hide();
+			$("#note-button").show();
+			$("#note-buttons-wrap").css("visibility", "hidden");
+			$("#note-buttons-wrap").children().removeClass("selected");
+			selectedPiece = undefined;
+		}
+	});
+
+	// note tools
+	$("#note-button").on("click", function () {
+		$("#note-button").hide();
+		$("#note-buttons-wrap").css("visibility", "visible");
+		$("#safe-note-button").click();
+	});
+
+	$("#safe-note-button").on("click", function () {
+		$("#note-buttons-wrap").children().removeClass("selected");
+		$("#safe-note-button").addClass("selected");
+		$(".piece-selection").removeClass("selected");
+		$(".cell").css("cursor", "default");
+		$("#preview-piece").attr("src", "images/pencil.png");
+		selectedPiece = "safeNote";
+	});
+
+	$("#flag-note-button").on("click", function () {
+		$("#note-buttons-wrap").children().removeClass("selected");
+		$("#flag-note-button").addClass("selected");
+		$(".piece-selection").removeClass("selected");
+		$(".cell").css("cursor", "default");
+		$("#preview-piece").attr("src", "images/pencil.png");
+		selectedPiece = "flagNote";
 	});
 
 	// preview piece mouse events
@@ -93,15 +134,6 @@ function setupEventListeners() {
 
 		$("#preview-piece").css("left", `${x - halfWidth}px`);
 		$("#preview-piece").css("top", `${y - halfWidth}px`);
-	});
-
-	$("body").on("click", function (e) {
-		if (e.target === e.currentTarget) {
-			$(".piece-selection").removeClass("selected");
-			$(".cell").css("cursor", "default");
-			$("#preview-piece").hide();
-			selectedPiece = undefined;
-		}
 	});
 }
 

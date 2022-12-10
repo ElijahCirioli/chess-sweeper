@@ -33,6 +33,7 @@ body {
 #title-wrap {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: flex-start;
 	gap: 0;
@@ -67,6 +68,7 @@ body {
 	background-color: var(--red-color);
 	display: flex;
 	flex-direction: column;
+	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: center;
 	padding: 10px;
@@ -87,6 +89,7 @@ body {
 #piece-selection-wrap {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: nowrap;
 	justify-content: space-evenly;
 	align-items: center;
 	background-color: #d9d9d9;
@@ -98,6 +101,7 @@ body {
 .piece-selection {
 	display: flex;
 	flex-direction: column;
+	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: center;
 	gap: 4px;
@@ -126,6 +130,7 @@ body {
 #icon-bar-wrap {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: nowrap;
 	justify-content: space-between;
 	align-items: center;
 	width: calc(100% - 30px);
@@ -137,9 +142,10 @@ body {
 #icon-bar-right-wrap {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: nowrap;
 	justify-content: flex-end;
 	align-items: center;
-	gap: 20px;
+	gap: 16px;
 	height: 100%;
 	margin: 0;
 	padding: 0;
@@ -178,6 +184,52 @@ body {
 #hint-button {
 	-webkit-mask-image: url("images/lightbulb.svg");
 	mask-image: url("images/lightbulb.svg");
+}
+
+#safe-note-button {
+	-webkit-mask-image: url("images/check.svg");
+	mask-image: url("images/check.svg");
+	background-color: #d9d9d9;
+	width: 21px;
+	height: 21px;
+	transition: background-color 0.2s;
+}
+
+#safe-note-button:hover {
+	background-color: #ebe7e7;
+}
+
+#safe-note-button.selected {
+	background-color: var(--selection-color);
+}
+
+#flag-note-button {
+	-webkit-mask-image: url("images/note-flag-solid.svg");
+	mask-image: url("images/note-flag-solid.svg");
+	background-color: #d9d9d9;
+	transition: background-color 0.2s;
+}
+
+#flag-note-button:hover {
+	background-color: #ebe7e7;
+}
+
+#flag-note-button.selected {
+	background-color: var(--selection-color);
+}
+
+#note-buttons-wrap {
+	display: flex;
+	visibility: hidden;
+	height: 100%;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 5px;
+	background-color: var(--black-color);
+	padding: 2px 5px;
+	border-radius: 12px;
 }
 
 #timer {

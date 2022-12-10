@@ -47,15 +47,21 @@ class Cell {
 		});
 
 		this.element.on("click", function () {
-			if (selectedPiece && !self.piece && !self.hasFlagBool) {
-				self.placePiece();
-			} else if (self.hasFlagBool) {
+			if (self.hasFlagBool) {
 				// remove flag
 				self.hasFlagBool = false;
 				self.element.children(".piece-image").hide();
 				self.element.removeClass("selected");
 				pieceCounts.flag++;
 				$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
+			} else if (self.piece || !selectedPiece) {
+				return;
+			}
+
+			if (selectedPiece === "safeNote" || selectedPiece === "flagNote") {
+				self.mark();
+			} else {
+				self.placePiece();
 			}
 		});
 	}
@@ -85,6 +91,16 @@ class Cell {
 		$(".piece-selection").removeClass("selected");
 		$(".cell").css("cursor", "default");
 		$("#preview-piece").hide();
+	}
+
+	mark() {
+		console.log("a");
+		if (selectedPiece === "safeNote") {
+			this.element.children(".piece-image").attr("src", "images/check-outline.svg");
+		} else {
+			this.element.children(".piece-image").attr("src", "images/note-flag-outline.svg");
+		}
+		this.element.children(".piece-image").show();
 	}
 
 	updateMineCount() {
