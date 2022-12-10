@@ -21,8 +21,8 @@
 			rel="stylesheet"
 		/>
 
+		<script src="chess.js"></script>
 		<script src="cell.js"></script>
-		<script src="piece.js"></script>
 		<script src="game.js"></script>
 	</head>
 	<body>
@@ -31,8 +31,16 @@
 			<div id="title-end-cap"></div>
 		</div>
 		<div id="content-wrap">
+			<div id="icon-bar-wrap">
+				<button class="icon" id="back-button"></button>
+				<p id="timer">00:00</p>
+				<div id="icon-bar-right-wrap">
+					<button class="icon" id="note-button"></button>
+					<button class="icon" id="hint-button"></button>
+				</div>
+			</div>
 			<div id="game-wrap">
-				<div id="board"></div>
+				<div id="board"><img id="preview-piece" /></div>
 				<div id="piece-selection-wrap">
 					<div class="piece-selection" id="piece-selection-pawn">
 						<img class="piece-selection-image" src="./images/pawn.png" />
