@@ -3,13 +3,13 @@ let pieceCounts;
 let selectedPiece;
 let timerStart;
 let numMines;
-let hasPlacedMines;
+let mineCells;
 
 function startGame(size, pieces, mines) {
 	pieceCounts = pieces;
 	pieceCounts.flag = mines;
 	numMines = mines;
-	hasPlacedMines = false;
+	mineCells = [];
 	generateBoard(size);
 	startTimer();
 
@@ -35,6 +35,22 @@ function generateBoard(size) {
 
 	$("#preview-piece").css("width", `${0.92 * cellSize}px`);
 	$("#preview-piece").css("height", `${0.92 * cellSize}px`);
+
+	$(".piece-mine-number").css("line-height", `${cellSize}px`);
+	$(".piece-mine-number").css("font-size", `${Math.floor(0.72 * cellSize)}px`);
+}
+
+function generateMines(x, y) {
+	let mx, my;
+	for (let i = 0; i < numMines; i++) {
+		do {
+			mx = Math.floor(Math.random() * board.length);
+			my = Math.floor(Math.random() * board.length);
+		} while (board[my][mx].hasMine() || (x === mx && y === my));
+
+		mineCells.push(board[my][mx]);
+		board[my][mx].setMine();
+	}
 }
 
 function setupEventListeners() {
@@ -44,6 +60,7 @@ function setupEventListeners() {
 
 		if ($(this).hasClass("selected")) {
 			$(".piece-selection").removeClass("selected");
+			$(".cell").css("cursor", "default");
 			selectedPiece = undefined;
 			return;
 		}
@@ -55,6 +72,7 @@ function setupEventListeners() {
 		$(".piece-selection").removeClass("selected");
 		$(this).addClass("selected");
 		$("#preview-piece").attr("src", `images/${selectedPiece}.png`);
+		$(".cell").css("cursor", "pointer");
 	});
 
 	// preview piece mouse events
@@ -65,6 +83,7 @@ function setupEventListeners() {
 	});
 	$("#board").on("mouseleave", function () {
 		$("#preview-piece").hide();
+		$(".cell").removeClass("highlight");
 	});
 	$("#board").on("mousemove", function (e) {
 		const rect = $("#board")[0].getBoundingClientRect();
@@ -79,17 +98,44 @@ function setupEventListeners() {
 	$("body").on("click", function (e) {
 		if (e.target === e.currentTarget) {
 			$(".piece-selection").removeClass("selected");
+			$(".cell").css("cursor", "default");
 			$("#preview-piece").hide();
 			selectedPiece = undefined;
 		}
 	});
 }
 
-function updateAllMineCounts() {}
+function updateAllMineCounts() {
+	for (const row of board) {
+		for (const cell of row) {
+			cell.updateMineCount();
+		}
+	}
+}
 
-function checkForWin() {}
+function highlightPossibleMoves(moves) {
+	$(".cell").removeClass("highlight");
+	for (const m of moves) {
+		board[m.y][m.x].highlight();
+	}
+}
 
-function checkForLoss() {}
+function checkForWin() {
+	for (const cell of mineCells) {
+		if (!cell.hasFlag()) {
+			return;
+		}
+	}
+	alert("You win");
+}
+
+function checkForLoss() {
+	for (const cell of mineCells) {
+		if (cell.hasPiece()) {
+			alert("You lose");
+		}
+	}
+}
 
 function startTimer() {
 	timerStart = Date.now();

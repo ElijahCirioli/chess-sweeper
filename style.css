@@ -1,10 +1,11 @@
 :root {
 	--red-color: #e06666;
+	--dark-red-color: #dc0a0a;
 	--black-color: #204055;
 	--lighter-black-color: #294e66;
 	--dark-cell-color: #74ad5b;
 	--light-cell-color: #8fc377;
-	--light-highlight-color: #ffd966;
+	--light-highlight-color: #fad153;
 	--dark-highlight-color: #ebb923;
 	--selection-color: #ffcd56;
 }
@@ -202,16 +203,26 @@ body {
 	max-width: 100%;
 	max-height: 100%;
 	overflow: hidden;
+	position: relative;
+	cursor: default;
+}
+
+.cell.selected {
+	-webkit-box-shadow: inset 0 0 15px var(--selection-color);
+	-moz-box-shadow: inset 0 0 15px var(--selection-color);
+	box-shadow: inset 0 0 15px var(--selection-color);
+}
+
+.cell.highlight {
+	background-color: var(--dark-highlight-color);
 }
 
 .light {
 	background-color: var(--light-cell-color);
 }
 
-.inset-shadow {
-	-webkit-box-shadow: inset 0 0 15px var(--selection-color);
-	-moz-box-shadow: inset 0 0 15px var(--selection-color);
-	box-shadow: inset 0 0 15px var(--selection-color);
+.light.highlight {
+	background-color: var(--light-highlight-color);
 }
 
 .piece-image {
@@ -224,6 +235,19 @@ body {
 .piece-mine-number {
 	z-index: 10;
 	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	font-family: "Martian Mono", monospace;
+	font-weight: bold;
+	text-align: center;
+	color: var(--dark-red-color);
+	text-shadow: 1px 1px 2px var(--black-color);
+	opacity: 0.85;
+	cursor: default;
+	display: none;
 }
 
 #preview-piece {
@@ -233,7 +257,4 @@ body {
 	pointer-events: none;
 	margin: 0;
 	filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.4));
-	font-family: "Martian Mono", monospace;
-	font-size: 1rem;
-	color: var(--red-color);
 }

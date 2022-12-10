@@ -4,8 +4,8 @@ class Cell {
 		this.y = y;
 		this.piece;
 
-		this.hasMine = false;
-		this.hasFlag = false;
+		this.hasMineBool = false;
+		this.hasFlagBool = false;
 		this.marking = 0;
 
 		this.generateElement();
@@ -27,26 +27,44 @@ class Cell {
 		const self = this;
 
 		this.element.on("mouseenter", function () {
-			if (!selectedPiece) {
+			let moves;
+			if (self.piece && self.piece !== "flag") {
+				moves = getMoves(self.piece, self);
+			} else if (selectedPiece) {
+				moves = getMoves(selectedPiece, self);
+			} else {
+				$(".cell").removeClass("highlight");
 				return;
 			}
 
-			$(".cell").removeClass("inset-shadow");
-			self.element.addClass("inset-shadow");
+			highlightPossibleMoves(moves);
+			$(".cell").removeClass("selected");
+			self.element.addClass("selected");
 		});
 
 		this.element.on("mouseleave", function () {
-			self.element.removeClass("inset-shadow");
+			self.element.removeClass("selected");
 		});
 
 		this.element.on("click", function () {
-			if (selectedPiece && !self.piece) {
+			if (selectedPiece && !self.piece && !self.hasFlagBool) {
 				self.placePiece();
+			} else if (self.hasFlagBool) {
+				// remove flag
+				self.hasFlagBool = false;
+				self.element.children(".piece-image").hide();
+				self.element.removeClass("selected");
+				pieceCounts.flag++;
+				$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
 			}
 		});
 	}
 
 	placePiece() {
+		if (mineCells.length === 0) {
+			generateMines(this.x, this.y);
+		}
+
 		pieceCounts[selectedPiece]--;
 		$(`#piece-selection-${selectedPiece}`)
 			.children(".piece-selection-counter")
@@ -55,6 +73,8 @@ class Cell {
 		this.element.children(".piece-image").attr("src", `images/${selectedPiece}.png`);
 		this.element.children(".piece-image").show();
 		if (selectedPiece === "flag") {
+			this.hasFlagBool = true;
+			this.element.children(".piece-image").css("cursor", "pointer");
 			checkForWin();
 		} else {
 			this.piece = selectedPiece;
@@ -63,6 +83,7 @@ class Cell {
 		}
 		selectedPiece = undefined;
 		$(".piece-selection").removeClass("selected");
+		$(".cell").css("cursor", "default");
 		$("#preview-piece").hide();
 	}
 
@@ -72,12 +93,43 @@ class Cell {
 		}
 
 		const count = getMineCount(this);
-
 		if (count === 0) {
 			this.element.children(".piece-mine-number").hide();
 		} else {
 			this.element.children(".piece-mine-number").show();
 			this.element.children(".piece-mine-number").text(count);
 		}
+	}
+
+	highlight() {
+		this.element.addClass("highlight");
+	}
+
+	hasMine() {
+		return this.hasMineBool;
+	}
+
+	setMine() {
+		this.hasMineBool = true;
+	}
+
+	hasPiece() {
+		return this.piece != undefined;
+	}
+
+	getPiece() {
+		return this.piece;
+	}
+
+	hasFlag() {
+		return this.hasFlagBool;
+	}
+
+	getX() {
+		return this.x;
+	}
+
+	getY() {
+		return this.y;
 	}
 }
