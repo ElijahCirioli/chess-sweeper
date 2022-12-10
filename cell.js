@@ -26,9 +26,13 @@ class Cell {
 	setupEventListeners() {
 		const self = this;
 
-		this.element.on("mouseenter", function () {
+		this.element.on("mouseenter dragover", function (e) {
+			if (!self.piece && !self.hasFlagBool && selectedPiece) {
+				e.preventDefault();
+			}
+
 			let moves;
-			if (self.piece && self.piece !== "flag") {
+			if (self.piece && !self.hasFlagBool) {
 				moves = getMoves(self.piece, self);
 			} else if (selectedPiece) {
 				moves = getMoves(selectedPiece, self);
@@ -46,7 +50,7 @@ class Cell {
 			self.element.removeClass("selected");
 		});
 
-		this.element.on("click", function (e) {
+		this.element.on("click ", function () {
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");
 
@@ -57,6 +61,17 @@ class Cell {
 			} else if (selectedPiece === "safeNote" || selectedPiece === "flagNote") {
 				self.mark(selectedPiece);
 			} else {
+				self.placePiece();
+			}
+		});
+
+		this.element.on("drop ", function (e) {
+			e.preventDefault();
+
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
+
+			if (!self.hasFlagBool && !self.piece && selectedPiece) {
 				self.placePiece();
 			}
 		});
@@ -126,6 +141,19 @@ class Cell {
 				self.element.children(".piece-image").show();
 				self.hasFlagBool = true;
 				self.element.children(".piece-image").css("cursor", "pointer");
+
+				// drag and drop events
+				self.element.children(".piece-image").attr("draggable", "true");
+				self.element.children(".piece-image").off("dragstart");
+				self.element.children(".piece-image").on("dragstart", function () {
+					selectedPiece = `flagMove:${self.x}:${self.y}`;
+					$(".piece-selection").removeClass("selected");
+					$(".cell").css("cursor", "default");
+					$("#preview-piece").hide();
+					$("#context-menu").hide();
+					$(".cell").removeClass("menu-selected");
+				});
+
 				checkForWin();
 			}
 			$("#context-menu").hide();
@@ -158,22 +186,49 @@ class Cell {
 			generateMines(this.x, this.y);
 		}
 
+		if (selectedPiece && selectedPiece.startsWith("flagMove")) {
+			const [fromX, fromY] = selectedPiece.split(":").slice(1);
+			board[fromY][fromX].getElement().children(".piece-image").attr("draggable", "false");
+			board[fromY][fromX].removeFlag();
+			selectedPiece = "flag";
+		}
+
 		pieceCounts[selectedPiece]--;
 		$(`#piece-selection-${selectedPiece}`)
 			.children(".piece-selection-counter")
 			.text(pieceCounts[selectedPiece]);
+		if (pieceCounts[selectedPiece] === 0) {
+			$(`#piece-selection-${selectedPiece}`)
+				.children(".piece-selection-image")
+				.attr("draggable", "false");
+		}
 
 		this.element.children(".piece-image").attr("src", `images/${selectedPiece}.png`);
 		this.element.children(".piece-image").show();
+		this.element.children(".piece-image").off("dragstart");
 		if (selectedPiece === "flag") {
 			this.hasFlagBool = true;
 			this.element.children(".piece-image").css("cursor", "pointer");
+
+			// drag and drop events
+			this.element.children(".piece-image").attr("draggable", "true");
+			const self = this;
+			this.element.children(".piece-image").on("dragstart", function () {
+				selectedPiece = `flagMove:${self.x}:${self.y}`;
+				$(".piece-selection").removeClass("selected");
+				$(".cell").css("cursor", "default");
+				$("#preview-piece").hide();
+				$("#context-menu").hide();
+				$(".cell").removeClass("menu-selected");
+			});
+
 			checkForWin();
 		} else {
 			this.piece = selectedPiece;
 			updateAllMineCounts();
 			checkForLoss();
 		}
+		this.marking = 0;
 		selectedPiece = undefined;
 		$(".piece-selection").removeClass("selected");
 		$(".cell").css("cursor", "default");
@@ -208,6 +263,7 @@ class Cell {
 				this.marking = 2;
 			}
 		}
+		this.element.children(".piece-image").css("cursor", "inherit");
 	}
 
 	updateMineCount() {
@@ -254,5 +310,9 @@ class Cell {
 
 	getY() {
 		return this.y;
+	}
+
+	getElement() {
+		return this.element;
 	}
 }

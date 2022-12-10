@@ -47,12 +47,12 @@ body {
 	margin: 0;
 	font-size: 32px;
 	height: 32px;
-	padding: 14px 18px 14px 25px;
+	padding: 12px 18px 12px 25px;
 }
 
 #title-end-cap {
 	background-color: var(--red-color);
-	height: 60px;
+	height: 56px;
 	width: 30px;
 	clip-path: polygon(0 0, 0% 100%, 100% 0);
 }
@@ -60,7 +60,7 @@ body {
 #content-wrap {
 	position: relative;
 	display: block;
-	margin: 0 auto;
+	margin: 5px auto 0 auto;
 	width: 420px;
 }
 
@@ -330,6 +330,10 @@ body {
 	filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.4));
 	border-radius: 10px;
 	overflow: hidden;
+}
+
+#context-menu:hover + #preview-piece {
+	visibility: hidden;
 }
 
 .context-button {

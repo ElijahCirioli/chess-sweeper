@@ -15,6 +15,9 @@ function startGame(size, pieces, mines) {
 
 	for (const type in pieceCounts) {
 		$(`#piece-selection-${type}`).children(".piece-selection-counter").text(pieceCounts[type]);
+		if (pieceCounts[type] > 0) {
+			$(`#piece-selection-${type}`).children(".piece-selection-image").attr("draggable", "true");
+		}
 	}
 }
 
@@ -55,7 +58,7 @@ function generateMines(x, y) {
 
 function setupEventListeners() {
 	// piece selection mouse events
-	$(".piece-selection").on("mousedown", function () {
+	$(".piece-selection").on("click dragstart", function () {
 		const type = $(this).attr("id").split("-")[2];
 
 		if ($(this).hasClass("selected")) {
