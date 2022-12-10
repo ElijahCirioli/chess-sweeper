@@ -46,23 +46,110 @@ class Cell {
 			self.element.removeClass("selected");
 		});
 
-		this.element.on("click", function () {
+		this.element.on("click", function (e) {
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
+
 			if (self.hasFlagBool) {
-				// remove flag
-				self.hasFlagBool = false;
-				self.element.children(".piece-image").hide();
-				self.element.removeClass("selected");
-				pieceCounts.flag++;
-				$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
+				self.removeFlag();
 			} else if (self.piece || !selectedPiece) {
 				return;
-			}
-
-			if (selectedPiece === "safeNote" || selectedPiece === "flagNote") {
-				self.mark();
+			} else if (selectedPiece === "safeNote" || selectedPiece === "flagNote") {
+				self.mark(selectedPiece);
 			} else {
 				self.placePiece();
 			}
+		});
+
+		this.element.on("contextmenu", function (e) {
+			if (self.piece) {
+				return false;
+			}
+
+			// update the text
+			$("#flag-context-button")
+				.children(".context-button-text")
+				.text(self.hasFlagBool ? "Unflag" : "Flag");
+			if (pieceCounts.flag > 0 || self.hasFlagBool) {
+				$("#flag-context-button").show();
+			} else {
+				$("#flag-context-button").hide();
+			}
+			$("#safe-note-context-button")
+				.children(".context-button-text")
+				.text(self.marking === 1 ? "Unmark safe" : "Mark safe");
+			$("#flag-note-context-button")
+				.children(".context-button-text")
+				.text(self.marking === 2 ? "Unmark flag" : "Mark flag");
+
+			$("#context-menu").css("display", "flex");
+			$(".cell").removeClass("menu-selected");
+			self.element.addClass("menu-selected");
+
+			// position on the board
+			const boardSize = $("#board").width();
+			const menuWidth = $("#context-menu").width();
+			const menuHeight = $("#context-menu").height();
+			const rect = $("#board")[0].getBoundingClientRect();
+
+			let x = e.clientX - rect.left;
+			if (x + menuHeight > boardSize) {
+				x -= menuWidth;
+			}
+			let y = e.clientY - rect.top;
+			if (y + menuHeight > boardSize) {
+				y -= menuHeight;
+			}
+
+			$("#context-menu").css("left", `${x}px`);
+			$("#context-menu").css("top", `${y}px`);
+
+			self.setupContextMenuEventListeners();
+			return false;
+		});
+	}
+
+	setupContextMenuEventListeners() {
+		const self = this;
+
+		$("#flag-context-button").off("click");
+		$("#flag-context-button").on("click", function () {
+			if (self.hasFlagBool) {
+				self.removeFlag();
+			} else {
+				if (mineCells.length === 0) {
+					generateMines(this.x, this.y);
+				}
+				pieceCounts.flag--;
+				$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
+				self.element.children(".piece-image").attr("src", "images/flag.png");
+				self.element.children(".piece-image").show();
+				self.hasFlagBool = true;
+				self.element.children(".piece-image").css("cursor", "pointer");
+				checkForWin();
+			}
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
+		});
+
+		$("#flag-note-context-button").off("click");
+		$("#flag-note-context-button").on("click", function () {
+			if (self.hasFlagBool) {
+				self.removeFlag();
+			}
+			self.mark("flagNote");
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
+		});
+
+		$("#safe-note-context-button").off("click");
+		$("#safe-note-context-button").on("click", function () {
+			if (self.hasFlagBool) {
+				self.removeFlag();
+			}
+			self.mark("safeNote");
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
 		});
 	}
 
@@ -93,14 +180,34 @@ class Cell {
 		$("#preview-piece").hide();
 	}
 
-	mark() {
-		console.log("a");
-		if (selectedPiece === "safeNote") {
-			this.element.children(".piece-image").attr("src", "images/check-outline.svg");
+	removeFlag() {
+		this.hasFlagBool = false;
+		this.element.children(".piece-image").hide();
+		this.element.removeClass("selected");
+		pieceCounts.flag++;
+		$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
+	}
+
+	mark(type) {
+		if (type === "safeNote") {
+			if (this.marking === 1) {
+				this.element.children(".piece-image").hide();
+				this.marking = 0;
+			} else {
+				this.element.children(".piece-image").attr("src", "images/check-outline.svg");
+				this.element.children(".piece-image").show();
+				this.marking = 1;
+			}
 		} else {
-			this.element.children(".piece-image").attr("src", "images/note-flag-outline.svg");
+			if (this.marking === 2) {
+				this.element.children(".piece-image").hide();
+				this.marking = 0;
+			} else {
+				this.element.children(".piece-image").attr("src", "images/note-flag-outline.svg");
+				this.element.children(".piece-image").show();
+				this.marking = 2;
+			}
 		}
-		this.element.children(".piece-image").show();
 	}
 
 	updateMineCount() {

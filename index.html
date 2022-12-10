@@ -44,7 +44,23 @@
 				</div>
 			</div>
 			<div id="game-wrap">
-				<div id="board"><img id="preview-piece" /></div>
+				<div id="board">
+					<img id="preview-piece" />
+					<div id="context-menu">
+						<button class="context-button" id="flag-context-button">
+							<img class="context-button-image" src="./images/flag.png" />
+							<p class="context-button-text"></p>
+						</button>
+						<button class="context-button" id="flag-note-context-button">
+							<img class="context-button-image" src="./images/note-flag-outline.svg" />
+							<p class="context-button-text"></p>
+						</button>
+						<button class="context-button" id="safe-note-context-button">
+							<img class="context-button-image" src="./images/check-outline.svg" />
+							<p class="context-button-text"></p>
+						</button>
+					</div>
+				</div>
 				<div id="piece-selection-wrap">
 					<div class="piece-selection" id="piece-selection-pawn">
 						<img class="piece-selection-image" src="./images/pawn.png" />

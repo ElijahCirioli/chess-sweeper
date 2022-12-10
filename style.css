@@ -265,6 +265,12 @@ body {
 	box-shadow: inset 0 0 15px var(--selection-color);
 }
 
+.cell.menu-selected {
+	-webkit-box-shadow: inset 0 0 15px var(--selection-color);
+	-moz-box-shadow: inset 0 0 15px var(--selection-color);
+	box-shadow: inset 0 0 15px var(--selection-color);
+}
+
 .cell.highlight {
 	background-color: var(--dark-highlight-color);
 }
@@ -305,8 +311,62 @@ body {
 #preview-piece {
 	display: none;
 	position: absolute;
-	z-index: 100;
+	z-index: 50;
 	pointer-events: none;
 	margin: 0;
 	filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.4));
+}
+
+#context-menu {
+	display: none;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	width: 145px;
+	position: absolute;
+	z-index: 50;
+	margin: 0;
+	filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.4));
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.context-button {
+	background-color: #d9d9d9;
+	outline: none;
+	border: none;
+	width: 100%;
+	height: 34px;
+	margin: 0;
+	padding: 0 3px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 6px;
+	border-bottom: 1px solid var(--lighter-black-color);
+}
+
+.context-button:hover {
+	background-color: #ebe7e7;
+}
+
+.context-button:last-child {
+	border: none;
+}
+
+.context-button-image {
+	height: 30px;
+	width: auto;
+}
+
+.context-button-text {
+	text-align: left;
+	font-family: "Martian Mono", monospace;
+	font-size: 0.8rem;
+	color: var(--black-color);
 }

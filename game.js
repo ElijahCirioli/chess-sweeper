@@ -76,6 +76,8 @@ function setupEventListeners() {
 		$("#note-buttons-wrap").css("visibility", "hidden");
 		$("#note-buttons-wrap").children().removeClass("selected");
 		$("#note-button").show();
+		$("#context-menu").hide();
+		$(".cell").removeClass("menu-selected");
 	});
 
 	// unselect piece when clicking background
@@ -87,6 +89,8 @@ function setupEventListeners() {
 			$("#note-button").show();
 			$("#note-buttons-wrap").css("visibility", "hidden");
 			$("#note-buttons-wrap").children().removeClass("selected");
+			$("#context-menu").hide();
+			$(".cell").removeClass("menu-selected");
 			selectedPiece = undefined;
 		}
 	});
@@ -96,6 +100,8 @@ function setupEventListeners() {
 		$("#note-button").hide();
 		$("#note-buttons-wrap").css("visibility", "visible");
 		$("#safe-note-button").click();
+		$("#context-menu").hide();
+		$(".cell").removeClass("menu-selected");
 	});
 
 	$("#safe-note-button").on("click", function () {
@@ -104,6 +110,8 @@ function setupEventListeners() {
 		$(".piece-selection").removeClass("selected");
 		$(".cell").css("cursor", "default");
 		$("#preview-piece").attr("src", "images/pencil.png");
+		$("#context-menu").hide();
+		$(".cell").removeClass("menu-selected");
 		selectedPiece = "safeNote";
 	});
 
@@ -113,6 +121,8 @@ function setupEventListeners() {
 		$(".piece-selection").removeClass("selected");
 		$(".cell").css("cursor", "default");
 		$("#preview-piece").attr("src", "images/pencil.png");
+		$("#context-menu").hide();
+		$(".cell").removeClass("menu-selected");
 		selectedPiece = "flagNote";
 	});
 
@@ -134,6 +144,11 @@ function setupEventListeners() {
 
 		$("#preview-piece").css("left", `${x - halfWidth}px`);
 		$("#preview-piece").css("top", `${y - halfWidth}px`);
+	});
+
+	// context menu
+	$("#context-menu").on("mouseenter", function () {
+		$(".cell").removeClass("highlight");
 	});
 }
 
@@ -171,6 +186,7 @@ function checkForLoss() {
 
 function startTimer() {
 	timerStart = Date.now();
+	requestAnimationFrame(updateTimer);
 }
 
 function stopTimer() {
@@ -179,7 +195,6 @@ function stopTimer() {
 
 function updateTimer() {
 	if (!timerStart) {
-		requestAnimationFrame(updateTimer);
 		return;
 	}
 
@@ -200,7 +215,6 @@ function updateTimer() {
 }
 
 window.onload = () => {
-	updateTimer();
 	setupEventListeners();
 	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10);
 };
