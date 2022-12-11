@@ -18,7 +18,7 @@ class Cell {
 			cellClass += " light";
 		}
 		this.element = $(
-			`<div class="${cellClass}"><img class="piece-image" /><p class="piece-mine-number"></p></div>`
+			`<div class="${cellClass}"><img class="piece-image" /><p class="piece-mine-number"></p><div class="cell-mine-dot"></div></div>`
 		);
 		$("#board").append(this.element);
 	}
@@ -27,7 +27,13 @@ class Cell {
 		const self = this;
 
 		this.element.on("mouseenter dragover", function (e) {
-			if (!self.piece && !self.hasFlagBool && selectedPiece) {
+			if (
+				!self.piece &&
+				!self.hasFlagBool &&
+				selectedPiece &&
+				selectedPiece !== "safeNote" &&
+				selectedPiece !== "flagNote"
+			) {
 				e.preventDefault();
 			}
 
@@ -71,7 +77,13 @@ class Cell {
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");
 
-			if (!self.hasFlagBool && !self.piece && selectedPiece) {
+			if (
+				!self.hasFlagBool &&
+				!self.piece &&
+				selectedPiece &&
+				selectedPiece !== "safeNote" &&
+				selectedPiece !== "flagNote"
+			) {
 				self.placePiece();
 			}
 		});
@@ -278,6 +290,16 @@ class Cell {
 			this.element.children(".piece-mine-number").show();
 			this.element.children(".piece-mine-number").text(count);
 		}
+	}
+
+	revealMine() {
+		this.element.children(".cell-mine-dot").show();
+		this.element.addClass("mine");
+	}
+
+	explode(radius) {
+		this.revealMine();
+		createExplosion(this.x, this.y, radius);
 	}
 
 	highlight() {

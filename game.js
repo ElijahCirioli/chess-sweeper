@@ -182,8 +182,25 @@ function checkForWin() {
 function checkForLoss() {
 	for (const cell of mineCells) {
 		if (cell.hasPiece()) {
-			alert("You lose");
+			$("#blocker").show();
+			stopTimer();
+			explodeMines(cell);
 		}
+	}
+}
+
+function explodeMines(cell) {
+	mineCells.sort((a, b) => {
+		const distA = Math.pow(cell.getX() - a.getX(), 2) + Math.pow(cell.getY() - a.getY(), 2);
+		const distB = Math.pow(cell.getX() - b.getX(), 2) + Math.pow(cell.getY() - b.getY(), 2);
+		return distA - distB;
+	});
+
+	const explosionRadius = (0.75 * $("#board").width()) / board.length;
+	for (let i = 0; i < mineCells.length; i++) {
+		setTimeout(() => {
+			mineCells[i].explode(explosionRadius);
+		}, i * 160);
 	}
 }
 
