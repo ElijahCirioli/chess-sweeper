@@ -19,6 +19,10 @@ function startGame(size, pieces, mines) {
 			$(`#piece-selection-${type}`).children(".piece-selection-image").attr("draggable", "true");
 		}
 	}
+
+	$("#piece-selection-wrap").show();
+	$("#blocker").hide();
+	showTopIcons();
 }
 
 function generateBoard(size) {
@@ -186,8 +190,10 @@ function checkForLoss() {
 	for (const cell of mineCells) {
 		if (cell.hasPiece()) {
 			$("#blocker").show();
+			hideTopIcons();
 			stopTimer();
 			explodeMines(cell);
+			setTimeout(showLoseMenu, board.length * 160 + 2500);
 		}
 	}
 }

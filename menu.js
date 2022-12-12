@@ -4,18 +4,16 @@ function setupMenuEventListeners() {
 	});
 
 	$("#menu-wrap").on("click", function (e) {
-		if (e.target === e.currentTarget) {
+		if (e.target === e.currentTarget && $("#hint-menu").css("display") !== "none") {
 			hideAllMenus();
 		}
 	});
 
 	// hint menu
 	$("#hint-button").on("click", function () {
-		if ($("#blocker").css("display") !== "none") {
-			return;
-		}
 		$("#menu-wrap").show();
 		$(".menu").hide();
+		hideTopIcons();
 		$("#hint-menu").show();
 	});
 
@@ -95,9 +93,35 @@ function setupMenuEventListeners() {
 			}
 		}
 	});
+
+	// game over menus
+	$("#play-again-button").on("click", function () {
+		window.location.reload();
+	});
 }
 
 function hideAllMenus() {
 	$("#menu-wrap").hide();
 	$(".menu").hide();
+	$("#lose-menu").addClass("game-over-menu-hidden");
+	showTopIcons();
+}
+
+function hideTopIcons() {
+	$("#icon-bar-right-wrap").hide();
+	$("#back-button").hide();
+}
+
+function showTopIcons() {
+	$("#icon-bar-right-wrap").show();
+	$("#back-button").show();
+}
+
+function showLoseMenu() {
+	$("#piece-selection-wrap").hide();
+	$("#menu-wrap").show();
+	$(".menu").hide();
+	hideTopIcons();
+	$("#lose-menu").show();
+	$("#lose-menu").removeClass("game-over-menu-hidden");
 }

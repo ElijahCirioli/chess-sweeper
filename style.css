@@ -1,5 +1,6 @@
 :root {
 	--red-color: #e06666;
+	--light-red-color: #e76e6e;
 	--dark-red-color: #dc0a0a;
 	--black-color: #204055;
 	--light-black-color: #294e66;
@@ -75,6 +76,8 @@ body {
 	align-items: center;
 	padding: 10px;
 	margin: 0;
+	-webkit-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
 	box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
 	position: relative;
 }
@@ -432,10 +435,10 @@ body {
 #menu-wrap {
 	display: none;
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	top: 10px;
+	left: 10px;
+	width: calc(100% - 20px);
+	height: calc(100% - 20px);
 	margin: 0;
 	z-index: 300;
 	background-color: rgba(0, 0, 0, 0.4);
@@ -452,6 +455,8 @@ body {
 	align-items: center;
 	padding: 10px;
 	gap: 10px;
+	-webkit-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
 	box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
 	position: relative;
 }
@@ -506,4 +511,62 @@ body {
 
 .menu-close-button:hover {
 	background-color: var(--light-black-color);
+}
+
+#lose-menu {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	background-color: transparent;
+	gap: 30px;
+	margin-top: 130px;
+	width: 70%;
+	transition: opacity 0.6s ease-in, margin-top 0.6s ease-out;
+}
+
+.game-over-menu-hidden {
+	margin-top: 160px !important;
+	opacity: 0;
+}
+
+.game-over-menu-title {
+	font-family: "Josefin Sans", sans-serif;
+	color: #f3f3f3;
+	font-size: 3rem;
+	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+	margin: 0;
+	text-align: center;
+	width: 100%;
+}
+
+.game-over-menu-button-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.game-over-menu-button {
+	width: 120px;
+	height: 34px;
+	font-family: "Martian Mono", monospace;
+	font-size: 0.8rem;
+	color: var(--button-color);
+	background-color: var(--red-color);
+	margin: 0;
+	text-align: center;
+	border: 0;
+	outline: 0;
+	cursor: pointer;
+	-webkit-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
+	box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.game-over-menu-button:hover {
+	color: var(--light-button-color);
+	background-color: var(--light-red-color);
 }
