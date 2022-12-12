@@ -41,6 +41,7 @@ body {
 	align-items: flex-start;
 	gap: 0;
 	filter: drop-shadow(3px 5px 9px rgba(0, 0, 0, 0.25));
+	width: 100%;
 }
 
 #title {
@@ -58,6 +59,15 @@ body {
 	height: 56px;
 	width: 30px;
 	clip-path: polygon(0 0, 0% 100%, 100% 0);
+}
+
+#ec-logo {
+	height: 50px;
+	width: auto;
+	cursor: pointer;
+	position: absolute;
+	right: 20px;
+	top: 10px;
 }
 
 #content-wrap {
@@ -513,7 +523,7 @@ body {
 	background-color: var(--light-black-color);
 }
 
-#lose-menu {
+.game-over-menu {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
@@ -569,4 +579,54 @@ body {
 .game-over-menu-button:hover {
 	color: var(--light-button-color);
 	background-color: var(--light-red-color);
+}
+
+#win-menu {
+	margin-top: 50px;
+	gap: 10px;
+}
+
+#win-menu.game-over-menu-hidden {
+	margin-top: 80px !important;
+	opacity: 0;
+}
+
+#score-wrap {
+	width: 85%;
+	background-color: var(--red-color);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 10px;
+	gap: 12px;
+	-webkit-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
+	box-shadow: 4px 5px 10px 2px rgba(0, 0, 0, 0.25);
+	position: relative;
+	margin: 0 0 10px 0;
+}
+
+#score-title {
+	font-family: "Josefin Sans", sans-serif;
+	color: #f3f3f3;
+	font-size: 1.4rem;
+	margin: 0 0 -5px 0;
+	text-align: center;
+	width: 100%;
+}
+
+.score-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	font-family: "Martian Mono", monospace;
+	font-size: 0.75rem;
+	width: 100%;
+	color: #12222d;
+}
+
+.score-row > p {
+	margin: 0;
 }

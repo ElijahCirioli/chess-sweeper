@@ -2,14 +2,22 @@ let board;
 let pieceCounts;
 let selectedPiece;
 let timerStart;
+let elapsedTime;
 let numMines;
 let mineCells;
+let scoreData;
+let levelNum = 0;
 
-function startGame(size, pieces, mines) {
+function startGame(size, pieces, mines, maximumMinutes, baseScore) {
 	pieceCounts = pieces;
 	pieceCounts.flag = mines;
 	numMines = mines;
 	mineCells = [];
+	scoreData = {
+		maximumMinutes: maximumMinutes,
+		hintMultiplier: 1,
+		baseScore: baseScore,
+	};
 	generateBoard(size);
 	startTimer();
 
@@ -181,9 +189,13 @@ function checkForWin() {
 		}
 	}
 
+	// they have won
 	$("#blocker").show();
 	stopTimer();
-	alert("You win");
+	for (const cell of mineCells) {
+		cell.revealMine();
+	}
+	setTimeout(showWinMenu, 2500);
 }
 
 function checkForLoss() {
@@ -227,7 +239,7 @@ function updateTimer() {
 		return;
 	}
 
-	const elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+	elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
 
 	const secondString = (elapsedTime % 60).toString().padStart(2, "0");
 	const minuteString = (Math.floor(elapsedTime / 60) % 60).toString().padStart(2, "0");
@@ -246,5 +258,5 @@ function updateTimer() {
 window.onload = () => {
 	setupEventListeners();
 	setupMenuEventListeners();
-	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10);
+	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10, 1, 1000);
 };

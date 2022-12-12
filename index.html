@@ -31,6 +31,9 @@
 		<div id="title-wrap">
 			<h1 id="title">Chess Sweeper</h1>
 			<div id="title-end-cap"></div>
+			<a href="https://elijahcirioli.com/"
+				><img src="./images/logo.png" id="ec-logo" alt="Elijah Cirioli"
+			/></a>
 		</div>
 		<div id="content-wrap">
 			<div id="icon-bar-wrap">
@@ -66,31 +69,31 @@
 				<canvas id="explosion-canvas" width="420" height="420"></canvas>
 				<div id="piece-selection-wrap">
 					<div class="piece-selection" id="piece-selection-pawn">
-						<img class="piece-selection-image" src="./images/pawn.png" />
+						<img class="piece-selection-image" src="./images/pawn.png" alt="Pawn" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-knight">
-						<img class="piece-selection-image" src="./images/knight.png" />
+						<img class="piece-selection-image" src="./images/knight.png" alt="Knight" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-bishop">
-						<img class="piece-selection-image" src="./images/bishop.png" />
+						<img class="piece-selection-image" src="./images/bishop.png" alt="Bishop" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-rook">
-						<img class="piece-selection-image" src="./images/rook.png" />
+						<img class="piece-selection-image" src="./images/rook.png" alt="Rook" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-queen">
-						<img class="piece-selection-image" src="./images/queen.png" />
+						<img class="piece-selection-image" src="./images/queen.png" alt="Queen" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-king">
-						<img class="piece-selection-image" src="./images/king.png" />
+						<img class="piece-selection-image" src="./images/king.png" alt="King" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 					<div class="piece-selection" id="piece-selection-flag">
-						<img class="piece-selection-image" src="./images/flag.png" />
+						<img class="piece-selection-image" src="./images/flag.png" alt="Flag" />
 						<p class="piece-selection-counter">0</p>
 					</div>
 				</div>
@@ -111,8 +114,19 @@
 					<div class="menu game-over-menu game-over-menu-hidden" id="lose-menu">
 						<h2 class="game-over-menu-title">You lose</h2>
 						<div class="game-over-menu-button-wrap">
-							<button class="game-over-menu-button" id="home-button">Exit</button>
-							<button class="game-over-menu-button" id="play-again-button">Play again</button>
+							<button class="game-over-menu-button home-button">Exit</button>
+							<button class="game-over-menu-button play-again-button">Play again</button>
+						</div>
+					</div>
+					<div class="menu game-over-menu game-over-menu-hidden" id="win-menu">
+						<h2 class="game-over-menu-title">You win</h2>
+						<div id="score-wrap">
+							<h3 id="score-title">Score</h3>
+							<div class="score-row"></div>
+						</div>
+						<div class="game-over-menu-button-wrap">
+							<button class="game-over-menu-button home-button">Exit</button>
+							<button class="game-over-menu-button play-again-button">Play again</button>
 						</div>
 					</div>
 				</div>
