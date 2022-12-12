@@ -11,7 +11,7 @@ function setupMenuEventListeners() {
 
 	// hint menu
 	$("#hint-button").on("click", function () {
-		if (!$("#blocker").css("display") === "none") {
+		if ($("#blocker").css("display") !== "none") {
 			return;
 		}
 		$("#menu-wrap").show();

@@ -18,7 +18,7 @@ class Cell {
 			cellClass += " light";
 		}
 		this.element = $(
-			`<div class="${cellClass}"><img class="piece-image" /><p class="piece-mine-number"></p><div class="cell-mine-dot"></div></div>`
+			`<div class="${cellClass}"><div class="cell-mine-dot"></div><img class="piece-image" /><p class="piece-mine-number"></p></div>`
 		);
 		$("#board").append(this.element);
 	}
@@ -180,6 +180,7 @@ class Cell {
 			if (self.hasFlagBool) {
 				self.removeFlag();
 			}
+			self.element.removeClass("hint-highlight");
 			self.mark("flagNote");
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");

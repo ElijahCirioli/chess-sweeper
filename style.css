@@ -300,7 +300,10 @@ body {
 	display: none;
 	width: 92%;
 	height: 92%;
-	margin: 4%;
+	position: absolute;
+	top: 4%;
+	left: 4%;
+	z-index: 5;
 }
 
 .piece-mine-number {
@@ -327,9 +330,11 @@ body {
 	height: 40%;
 	background-color: var(--red-color);
 	pointer-events: none;
-	z-index: 2;
 	border-radius: 50%;
-	margin: 30%;
+	position: absolute;
+	top: 30%;
+	left: 30%;
+	z-index: 3;
 }
 
 #preview-piece {
