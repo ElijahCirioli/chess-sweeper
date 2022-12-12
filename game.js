@@ -176,6 +176,9 @@ function checkForWin() {
 			return;
 		}
 	}
+
+	$("#blocker").show();
+	stopTimer();
 	alert("You win");
 }
 
@@ -236,5 +239,6 @@ function updateTimer() {
 
 window.onload = () => {
 	setupEventListeners();
+	setupMenuEventListeners();
 	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10);
 };

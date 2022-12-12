@@ -5,11 +5,11 @@ function getMoves(type, cell) {
 		case "knight":
 			return getMovesKnight(cell);
 		case "bishop":
-			return getMovesBishop(cell);
+			return getMovesBishop(cell, false);
 		case "rook":
-			return getMovesRook(cell);
+			return getMovesRook(cell, false);
 		case "queen":
-			return getMovesQueen(cell);
+			return getMovesQueen(cell, false);
 		case "king":
 			return getMovesKing(cell);
 	}
@@ -17,6 +17,32 @@ function getMoves(type, cell) {
 }
 
 function getMineCount(cell) {
+	return getCount(cell, "hasMine");
+}
+
+function getFlagCount(cell) {
+	return getCount(cell, "hasFlag");
+}
+
+function getVisibleMoves(cell) {
+	switch (cell.getPiece()) {
+		case "pawn":
+			return getMovesPawn(cell);
+		case "knight":
+			return getMovesKnight(cell);
+		case "bishop":
+			return getMovesBishop(cell, true);
+		case "rook":
+			return getMovesRook(cell, true);
+		case "queen":
+			return getMovesQueen(cell, true);
+		case "king":
+			return getMovesKing(cell);
+	}
+	return [];
+}
+
+function getCount(cell, stopFunction) {
 	if (!cell.hasPiece()) {
 		return 0;
 	}
@@ -26,7 +52,7 @@ function getMineCount(cell) {
 		let count = 0;
 		const moves = getMoves(type, cell);
 		for (const m of moves) {
-			if (board[m.y][m.x].hasMine()) {
+			if (board[m.y][m.x][stopFunction]()) {
 				count++;
 			}
 		}
@@ -35,11 +61,11 @@ function getMineCount(cell) {
 
 	switch (type) {
 		case "bishop":
-			return getMineCountBishop(cell);
+			return getCountBishop(cell, stopFunction);
 		case "rook":
-			return getMineCountRook(cell);
+			return getCountRook(cell, stopFunction);
 		case "queen":
-			return getMineCountQueen(cell);
+			return getCountQueen(cell, stopFunction);
 	}
 	return 0;
 }
@@ -54,10 +80,13 @@ function canMove(x, y) {
 	return !board[y][x].hasPiece();
 }
 
-function getLineMoves(moves, x, y, xDir, yDir) {
+function getLineMoves(moves, x, y, xDir, yDir, stopOnFlag) {
 	for (let i = 1; true; i++) {
 		const m = { x: x + i * xDir, y: y + i * yDir };
 		if (canMove(m.x, m.y)) {
+			if (stopOnFlag && board[m.y][m.x].hasFlag()) {
+				return;
+			}
 			moves.push(m);
 		} else {
 			return;
@@ -93,26 +122,26 @@ function getMovesKnight(cell) {
 	return moves;
 }
 
-function getMovesBishop(cell) {
+function getMovesBishop(cell, stopOnFlag) {
 	const moves = [];
-	getLineMoves(moves, cell.getX(), cell.getY(), 1, 1);
-	getLineMoves(moves, cell.getX(), cell.getY(), 1, -1);
-	getLineMoves(moves, cell.getX(), cell.getY(), -1, 1);
-	getLineMoves(moves, cell.getX(), cell.getY(), -1, -1);
+	getLineMoves(moves, cell.getX(), cell.getY(), 1, 1, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), 1, -1, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), -1, 1, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), -1, -1, stopOnFlag);
 	return moves;
 }
 
-function getMovesRook(cell) {
+function getMovesRook(cell, stopOnFlag) {
 	const moves = [];
-	getLineMoves(moves, cell.getX(), cell.getY(), 0, 1);
-	getLineMoves(moves, cell.getX(), cell.getY(), 0, -1);
-	getLineMoves(moves, cell.getX(), cell.getY(), 1, 0);
-	getLineMoves(moves, cell.getX(), cell.getY(), -1, 0);
+	getLineMoves(moves, cell.getX(), cell.getY(), 0, 1, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), 0, -1, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), 1, 0, stopOnFlag);
+	getLineMoves(moves, cell.getX(), cell.getY(), -1, 0, stopOnFlag);
 	return moves;
 }
 
-function getMovesQueen(cell) {
-	return getMovesRook(cell).concat(getMovesBishop(cell));
+function getMovesQueen(cell, stopOnFlag) {
+	return getMovesRook(cell, stopOnFlag).concat(getMovesBishop(cell, stopOnFlag));
 }
 
 function getMovesKing(cell) {
@@ -131,14 +160,14 @@ function getMovesKing(cell) {
 	return moves;
 }
 
-function getMineCountBishop(cell) {
+function getCountBishop(cell, stopFunction) {
 	let count = 0;
 	for (let xDir = -1; xDir <= 1; xDir += 2) {
 		for (let yDir = -1; yDir <= 1; yDir += 2) {
 			const moves = [];
-			getLineMoves(moves, cell.getX(), cell.getY(), xDir, yDir);
+			getLineMoves(moves, cell.getX(), cell.getY(), xDir, yDir, false);
 			for (const m of moves) {
-				if (board[m.y][m.x].hasMine()) {
+				if (board[m.y][m.x][stopFunction]()) {
 					count++;
 					break;
 				}
@@ -148,7 +177,7 @@ function getMineCountBishop(cell) {
 	return count;
 }
 
-function getMineCountRook(cell) {
+function getCountRook(cell, stopFunction) {
 	let count = 0;
 	for (let xDir = -1; xDir <= 1; xDir++) {
 		for (let yDir = -1; yDir <= 1; yDir++) {
@@ -157,9 +186,9 @@ function getMineCountRook(cell) {
 			}
 
 			const moves = [];
-			getLineMoves(moves, cell.getX(), cell.getY(), xDir, yDir);
+			getLineMoves(moves, cell.getX(), cell.getY(), xDir, yDir, false);
 			for (const m of moves) {
-				if (board[m.y][m.x].hasMine()) {
+				if (board[m.y][m.x][stopFunction]()) {
 					count++;
 					break;
 				}
@@ -169,6 +198,6 @@ function getMineCountRook(cell) {
 	return count;
 }
 
-function getMineCountQueen(cell) {
-	return getMineCountBishop(cell) + getMineCountRook(cell);
+function getCountQueen(cell, stopFunction) {
+	return getCountBishop(cell, stopFunction) + getCountRook(cell, stopFunction);
 }

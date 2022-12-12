@@ -59,6 +59,7 @@ class Cell {
 		this.element.on("click ", function () {
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");
+			self.element.removeClass("hint-highlight");
 
 			if (self.hasFlagBool) {
 				self.removeFlag();
@@ -76,6 +77,7 @@ class Cell {
 
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");
+			self.element.removeClass("hint-highlight");
 
 			if (
 				!self.hasFlagBool &&
@@ -152,6 +154,7 @@ class Cell {
 				self.element.children(".piece-image").attr("src", "images/flag.png");
 				self.element.children(".piece-image").show();
 				self.hasFlagBool = true;
+				self.marking = 0;
 				self.element.children(".piece-image").css("cursor", "pointer");
 
 				// drag and drop events
@@ -221,6 +224,7 @@ class Cell {
 		if (selectedPiece === "flag") {
 			this.hasFlagBool = true;
 			this.element.children(".piece-image").css("cursor", "pointer");
+			this.marking = 0;
 
 			// drag and drop events
 			this.element.children(".piece-image").attr("draggable", "true");
@@ -237,9 +241,9 @@ class Cell {
 			checkForWin();
 		} else {
 			this.piece = selectedPiece;
-			updateAllMineCounts();
 			checkForLoss();
 		}
+		updateAllMineCounts();
 		this.marking = 0;
 		selectedPiece = undefined;
 		$(".piece-selection").removeClass("selected");
@@ -253,6 +257,7 @@ class Cell {
 		this.element.removeClass("selected");
 		pieceCounts.flag++;
 		$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
+		updateAllMineCounts();
 	}
 
 	mark(type) {
@@ -290,11 +295,18 @@ class Cell {
 			this.element.children(".piece-mine-number").show();
 			this.element.children(".piece-mine-number").text(count);
 		}
+
+		if (this.element.hasClass("hint-highlight")) {
+			if (count === getFlagCount(this)) {
+				this.element.removeClass("hint-highlight");
+			}
+		}
 	}
 
 	revealMine() {
 		this.element.children(".cell-mine-dot").show();
 		this.element.addClass("mine");
+		this.element.removeClass("hint-highlight");
 	}
 
 	explode(radius) {
@@ -304,6 +316,10 @@ class Cell {
 
 	highlight() {
 		this.element.addClass("highlight");
+	}
+
+	highlightHint() {
+		this.element.addClass("hint-highlight");
 	}
 
 	hasMine() {
@@ -336,5 +352,9 @@ class Cell {
 
 	getElement() {
 		return this.element;
+	}
+
+	getMarking() {
+		return this.marking;
 	}
 }

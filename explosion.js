@@ -11,7 +11,7 @@ class ExplosionParticle {
 		this.velX = speed * Math.cos(angle);
 		this.velY = speed * Math.sin(angle);
 		this.radius = Math.ceil((1 - energy) * 16) + 4;
-		this.life = (1 - energy) * 60 + 20;
+		this.life = (1 - energy) * 60 + 30;
 		if (energy < 0.2) {
 			this.color = "#757068";
 		} else if (energy < 0.4) {
