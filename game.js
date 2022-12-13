@@ -3,23 +3,18 @@ let pieceCounts;
 let selectedPiece;
 let timerStart;
 let elapsedTime;
-let numMines;
 let mineCells;
-let scoreData;
-let levelNum = 0;
+let level;
 
-function startGame(size, pieces, mines, maximumMinutes, baseScore) {
-	pieceCounts = pieces;
-	pieceCounts.flag = mines;
-	numMines = mines;
+function startGame(levelIndex) {
+	level = JSON.parse(JSON.stringify(levels[levelIndex]));
+	pieceCounts = level.pieces;
+	pieceCounts.flag = level.numMines;
 	mineCells = [];
-	scoreData = {
-		maximumMinutes: maximumMinutes,
-		hintMultiplier: 1,
-		baseScore: baseScore,
-		incorrectGuesses: 0,
-	};
-	generateBoard(size);
+
+	level.incorrectGuesses = 0;
+	level.hintMultiplier = 1;
+	generateBoard(level.boardSize);
 	startTimer();
 
 	for (const type in pieceCounts) {
@@ -30,6 +25,9 @@ function startGame(size, pieces, mines, maximumMinutes, baseScore) {
 	}
 
 	$("#piece-selection-wrap").show();
+	$("#icon-bar-wrap").css("visibility", "visible");
+	$("#board").show();
+	$("#main-menu-wrap").hide();
 	$("#blocker").hide();
 	showTopIcons();
 }
@@ -58,7 +56,7 @@ function generateBoard(size) {
 
 function generateMines(x, y) {
 	let mx, my;
-	for (let i = 0; i < numMines; i++) {
+	for (let i = 0; i < level.numMines; i++) {
 		do {
 			mx = Math.floor(Math.random() * board.length);
 			my = Math.floor(Math.random() * board.length);
@@ -259,5 +257,5 @@ function updateTimer() {
 window.onload = () => {
 	setupEventListeners();
 	setupMenuEventListeners();
-	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10, 30, 1000);
+	showMainMenu();
 };

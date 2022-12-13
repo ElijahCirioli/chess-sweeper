@@ -229,7 +229,7 @@ class Cell {
 
 			// adjust score for incorrect guesses
 			if (!this.hasMineBool) {
-				scoreData.incorrectGuesses++;
+				level.incorrectGuesses++;
 			}
 
 			// drag and drop events

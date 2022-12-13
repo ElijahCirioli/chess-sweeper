@@ -27,7 +27,7 @@ function setupMenuEventListeners() {
 				}
 			}
 		}
-		scoreData.hintMultiplier *= 0.9;
+		level.hintMultiplier *= 0.9;
 	});
 
 	$("#hint-blind-spots-button").on("click", function () {
@@ -68,7 +68,7 @@ function setupMenuEventListeners() {
 				}
 			}
 		}
-		scoreData.hintMultiplier *= 0.9;
+		level.hintMultiplier *= 0.9;
 	});
 
 	$("#hint-correct-button").on("click", function () {
@@ -81,7 +81,7 @@ function setupMenuEventListeners() {
 				cell.revealMine();
 			}
 		}
-		scoreData.hintMultiplier *= 0.75;
+		level.hintMultiplier *= 0.75;
 	});
 
 	$("#hint-reveal-button").on("click", function () {
@@ -95,7 +95,7 @@ function setupMenuEventListeners() {
 				break;
 			}
 		}
-		scoreData.hintMultiplier *= 0.75;
+		level.hintMultiplier *= 0.75;
 	});
 
 	// game over menus
@@ -144,12 +144,14 @@ function generateScoreDisplay() {
 	$(".score-row").remove();
 	$("#new-highscore-message").remove();
 
-	let score = scoreData.baseScore;
-	$("#score-wrap").append(`<div class="score-row"><p>Level ${levelNum} complete:</p><p>${score}</p></div>`);
+	let score = level.baseScore;
+	$("#score-wrap").append(
+		`<div class="score-row"><p>Level ${level.number} complete:</p><p>${score}</p></div>`
+	);
 
 	let timeBonus = 0;
-	if (elapsedTime < scoreData.maximumMinutes * 60) {
-		timeBonus = Math.ceil((scoreData.maximumMinutes * 60 - elapsedTime) * 5);
+	if (elapsedTime < level.maximumMinutes * 60) {
+		timeBonus = Math.ceil((level.maximumMinutes * 60 - elapsedTime) * 5);
 	}
 	score += timeBonus;
 	$("#score-wrap").append(`<div class="score-row"><p>Time bonus:</p><p>+${timeBonus}</p></div>`);
@@ -162,28 +164,95 @@ function generateScoreDisplay() {
 	score += pieceBonus;
 	$("#score-wrap").append(`<div class="score-row"><p>Extra pieces bonus:</p><p>+${pieceBonus}</p></div>`);
 
-	let guessingPenalty = Math.min(100 * scoreData.incorrectGuesses, score);
+	let guessingPenalty = Math.min(100 * level.incorrectGuesses, score);
 	$("#score-wrap").append(
 		`<div class="score-row"><p>Guessing penalty:</p><p>-${guessingPenalty}</p></div>`
 	);
 	score -= guessingPenalty;
 
-	if (scoreData.hintMultiplier !== 1) {
-		scoreData.hintMultiplier = Math.round(Math.max(0.1, scoreData.hintMultiplier) * 100) / 100;
-		score = Math.round(score * scoreData.hintMultiplier);
+	if (level.hintMultiplier !== 1) {
+		level.hintMultiplier = Math.round(Math.max(0.1, level.hintMultiplier) * 100) / 100;
+		score = Math.round(score * level.hintMultiplier);
 		$("#score-wrap").append(
-			`<div class="score-row"><p>Hint penalty:</p><p>x${scoreData.hintMultiplier.toPrecision(
-				2
-			)}</p></div>`
+			`<div class="score-row"><p>Hint penalty:</p><p>x${level.hintMultiplier.toPrecision(2)}</p></div>`
 		);
 	}
 
 	$("#score-wrap").append(`<div class="score-row"><p><b>Total:</b></p><p><b>${score}</b></p></div>`);
 
-	const highscoreKey = `elijah-cirioli-chess-sweeper-highscore-level-${levelNum}`;
+	const highscoreKey = `elijah-cirioli-chess-sweeper-highscore-level-${level.number}`;
 	const highscore = localStorage.getItem(highscoreKey);
-	if (highscore === "null" || score > parseInt(highscore)) {
+	if (highscore === null || score > parseInt(highscore)) {
 		localStorage.setItem(highscoreKey, score);
 		$("#score-wrap").append(`<p id="new-highscore-message">New highscore</p>`);
 	}
+}
+
+function showMainMenu() {
+	$("#icon-bar-wrap").css("visibility", "hidden");
+	$("#board").hide();
+	$("#piece-selection-wrap").hide();
+	$("#main-menu-wrap").show();
+	generateLevelSelect(0);
+}
+
+function generateLevelSelect(levelIndex) {
+	$("#level-selection-wrap").empty();
+
+	// previous level
+	if (levelIndex > 0) {
+		$("#level-selection-wrap").append(
+			`<button class="level-selection-arrow-button" id="previous-level-button"></button>`
+		);
+		$("#level-selection-wrap").append(
+			`<h2 class="level-selection-icon" style="background-color: ${levels[levelIndex - 1].color};">${
+				levels[levelIndex - 1].number
+			}</h2>`
+		);
+	} else {
+		$("#level-selection-wrap").append(`<div class="level-selection-spacer"></div>`);
+	}
+
+	// current level
+	$("#level-selection-wrap").append(
+		`<h2 id="current-level-icon" class="level-selection-icon" style="background-color: ${levels[levelIndex].color};">${levels[levelIndex].number}</h2>`
+	);
+
+	// next level
+	if (levelIndex < levels.length - 1) {
+		$("#level-selection-wrap").append(
+			`<h2 class="level-selection-icon" style="background-color: ${levels[levelIndex + 1].color};">${
+				levels[levelIndex + 1].number
+			}</h2>`
+		);
+		$("#level-selection-wrap").append(
+			`<button class="level-selection-arrow-button" id="next-level-button"></button>`
+		);
+	} else {
+		$("#level-selection-wrap").append(`<div class="level-selection-spacer"></div>`);
+	}
+
+	// highscore
+	const highscore = localStorage.getItem(
+		`elijah-cirioli-chess-sweeper-highscore-level-${levels[levelIndex].number}`
+	);
+	if (highscore === null) {
+		$("#highscore").text("Personal best: ----");
+	} else {
+		$("#highscore").text(`Personal best: ${highscore}`);
+	}
+
+	// event listeners
+	$("#start-game-button").off("click");
+	$("#start-game-button").on("click", function () {
+		startGame(levelIndex);
+	});
+
+	$("#previous-level-button").on("click", function () {
+		generateLevelSelect(levelIndex - 1);
+	});
+
+	$("#next-level-button").on("click", function () {
+		generateLevelSelect(levelIndex + 1);
+	});
 }

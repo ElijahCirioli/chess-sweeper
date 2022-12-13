@@ -144,6 +144,7 @@ body {
 }
 
 #icon-bar-wrap {
+	visibility: hidden;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
@@ -570,9 +571,9 @@ body {
 	border: 0;
 	outline: 0;
 	cursor: pointer;
-	-webkit-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
-	box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+	box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
 	transition: background-color 0.2s, color 0.2s;
 }
 
@@ -650,4 +651,118 @@ body {
 	animation-duration: 0.8s;
 	animation-iteration-count: infinite;
 	animation-direction: alternate;
+}
+
+#main-menu-wrap {
+	background-color: var(--light-cell-color);
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	width: 400px;
+	height: 400px;
+	gap: 20px;
+	overflow: hidden;
+}
+
+#level-selection-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+}
+
+.level-selection-icon {
+	font-family: "Josefin Sans", sans-serif;
+	color: #f3f3f3;
+	font-size: 2rem;
+	margin: 0;
+	text-align: center;
+	width: 60px;
+	height: 60px;
+	line-height: 65px;
+	border: 5px solid var(--red-color);
+	-webkit-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+	box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+}
+
+#current-level-icon {
+	height: 90px;
+	width: 90px;
+	line-height: 100px;
+	font-size: 3.5rem;
+	margin: 0 5px;
+}
+
+.level-selection-arrow-button {
+	width: 36px;
+	height: 36px;
+	background-color: var(--black-color);
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-image: url("images/chevron.svg");
+	mask-image: url("images/chevron.svg");
+	transition: background-color 0.2s, transform 0.3s;
+}
+
+.level-selection-arrow-button:hover {
+	background-color: var(--light-black-color);
+}
+
+#next-level-button {
+	transform: scaleX(-1);
+}
+
+.level-selection-spacer {
+	width: 116px;
+}
+
+#highscore {
+	font-family: "Martian Mono", monospace;
+	font-size: 0.8rem;
+	color: var(--black-color);
+	margin: 0;
+}
+
+@keyframes scroll {
+	from {
+		left: 0;
+	}
+	to {
+		left: -240px;
+	}
+}
+
+.scrolling-icon-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 3px;
+	width: 400px;
+	position: relative;
+	animation-name: scroll;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+.scroll-reverse {
+	animation-direction: reverse;
+}
+
+.scrolling-icon {
+	width: 37px;
+	height: 37px;
 }
