@@ -227,6 +227,11 @@ class Cell {
 			this.element.children(".piece-image").css("cursor", "pointer");
 			this.marking = 0;
 
+			// adjust score for incorrect guesses
+			if (!this.hasMineBool) {
+				scoreData.incorrectGuesses++;
+			}
+
 			// drag and drop events
 			this.element.children(".piece-image").attr("draggable", "true");
 			const self = this;

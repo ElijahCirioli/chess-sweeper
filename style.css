@@ -582,12 +582,12 @@ body {
 }
 
 #win-menu {
-	margin-top: 50px;
+	margin-top: 35px;
 	gap: 10px;
 }
 
 #win-menu.game-over-menu-hidden {
-	margin-top: 80px !important;
+	margin-top: 65px !important;
 	opacity: 0;
 }
 
@@ -629,4 +629,25 @@ body {
 
 .score-row > p {
 	margin: 0;
+}
+
+@keyframes pulse {
+	from {
+		text-shadow: none;
+	}
+	to {
+		text-shadow: 1px 1px 4px var(--selection-color);
+	}
+}
+
+#new-highscore-message {
+	font-family: "Martian Mono", monospace;
+	font-size: 0.75rem;
+	font-weight: bold;
+	color: #12222d;
+	margin: 0;
+	animation-name: pulse;
+	animation-duration: 0.8s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
 }

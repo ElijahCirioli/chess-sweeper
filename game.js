@@ -17,6 +17,7 @@ function startGame(size, pieces, mines, maximumMinutes, baseScore) {
 		maximumMinutes: maximumMinutes,
 		hintMultiplier: 1,
 		baseScore: baseScore,
+		incorrectGuesses: 0,
 	};
 	generateBoard(size);
 	startTimer();
@@ -195,7 +196,7 @@ function checkForWin() {
 	for (const cell of mineCells) {
 		cell.revealMine();
 	}
-	setTimeout(showWinMenu, 2500);
+	setTimeout(showWinMenu, 2000);
 }
 
 function checkForLoss() {
@@ -258,5 +259,5 @@ function updateTimer() {
 window.onload = () => {
 	setupEventListeners();
 	setupMenuEventListeners();
-	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10, 1, 1000);
+	startGame(10, { pawn: 12, rook: 6, knight: 8, king: 1, queen: 2, bishop: 4 }, 10, 30, 1000);
 };

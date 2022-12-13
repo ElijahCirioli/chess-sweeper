@@ -92,10 +92,10 @@ function setupMenuEventListeners() {
 		for (const cell of mineCells) {
 			if (!cell.hasFlag() && !cell.getElement().hasClass("mine")) {
 				cell.revealMine();
-				scoreData.hintMultiplier *= 0.75;
-				return;
+				break;
 			}
 		}
+		scoreData.hintMultiplier *= 0.75;
 	});
 
 	// game over menus
@@ -142,6 +142,8 @@ function showWinMenu() {
 
 function generateScoreDisplay() {
 	$(".score-row").remove();
+	$("#new-highscore-message").remove();
+
 	let score = scoreData.baseScore;
 	$("#score-wrap").append(`<div class="score-row"><p>Level ${levelNum} complete:</p><p>${score}</p></div>`);
 
@@ -160,6 +162,12 @@ function generateScoreDisplay() {
 	score += pieceBonus;
 	$("#score-wrap").append(`<div class="score-row"><p>Extra pieces bonus:</p><p>+${pieceBonus}</p></div>`);
 
+	let guessingPenalty = Math.min(100 * scoreData.incorrectGuesses, score);
+	$("#score-wrap").append(
+		`<div class="score-row"><p>Guessing penalty:</p><p>-${guessingPenalty}</p></div>`
+	);
+	score -= guessingPenalty;
+
 	if (scoreData.hintMultiplier !== 1) {
 		scoreData.hintMultiplier = Math.round(Math.max(0.1, scoreData.hintMultiplier) * 100) / 100;
 		score = Math.round(score * scoreData.hintMultiplier);
@@ -171,4 +179,11 @@ function generateScoreDisplay() {
 	}
 
 	$("#score-wrap").append(`<div class="score-row"><p><b>Total:</b></p><p><b>${score}</b></p></div>`);
+
+	const highscoreKey = `elijah-cirioli-chess-sweeper-highscore-level-${levelNum}`;
+	const highscore = localStorage.getItem(highscoreKey);
+	if (highscore === "null" || score > parseInt(highscore)) {
+		localStorage.setItem(highscoreKey, score);
+		$("#score-wrap").append(`<p id="new-highscore-message">New highscore</p>`);
+	}
 }
