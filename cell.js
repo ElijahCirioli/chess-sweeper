@@ -56,7 +56,7 @@ class Cell {
 			self.element.removeClass("selected");
 		});
 
-		this.element.on("click ", function () {
+		this.element.on("click", function () {
 			$("#context-menu").hide();
 			$(".cell").removeClass("menu-selected");
 			self.element.removeClass("hint-highlight");

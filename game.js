@@ -264,4 +264,5 @@ window.onload = () => {
 	setupEventListeners();
 	setupMenuEventListeners();
 	showMainMenu();
+	resize();
 };

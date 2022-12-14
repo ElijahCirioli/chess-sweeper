@@ -1,0 +1,23 @@
+@media only screen and (max-width: 480px) {
+	#title {
+		padding: 12px 0 10px 0;
+		text-align: center;
+		width: 100%;
+	}
+
+	#title-end-cap {
+		display: none;
+	}
+
+	#ec-logo {
+		display: none;
+	}
+
+	#main-menu-wrap > .game-over-menu-button {
+		width: 160px;
+	}
+
+	#content-wrap {
+		margin-top: 40px;
+	}
+}

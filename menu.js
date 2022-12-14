@@ -305,3 +305,15 @@ function showTutorial() {
 	$("#piece-selection-wrap").hide();
 	$("#tutorial-wrap").show();
 }
+
+function resize() {
+	const width = $("html").width();
+	if (width >= 420) {
+		// we don't need to resize
+		$("#content-wrap").css("transform", "none");
+		return;
+	}
+	$("#content-wrap").css("transform", `scale(${width / 420}) translateX(-${(420 - width) / 2}px)`);
+}
+
+window.onresize = resize;
