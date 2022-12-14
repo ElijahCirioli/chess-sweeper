@@ -98,15 +98,41 @@ function setupMenuEventListeners() {
 		level.hintMultiplier *= 0.75;
 	});
 
+	// quit menu
+	$("#back-button").on("click", function () {
+		$("#menu-wrap").show();
+		$(".menu").hide();
+		hideTopIcons();
+		$("#quit-menu").show();
+	});
+
+	$("#quit-confirm-button").on("click", function () {
+		hideAllMenus();
+		if (mineCells.length === 0) {
+			generateMines(-1, -1);
+		}
+
+		$("#blocker").show();
+		hideTopIcons();
+		stopTimer();
+		explodeMines(mineCells[0]);
+		setTimeout(showLoseMenu, board.length * 160 + 2500);
+	});
+
 	// game over menus
 	$(".play-again-button").on("click", function () {
-		window.location.reload();
+		startGame(level.number - 1);
+	});
+
+	$(".home-button").on("click", function () {
+		showMainMenu();
 	});
 }
 
 function hideAllMenus() {
 	$("#menu-wrap").hide();
 	$(".menu").hide();
+	$(".game-over-menu").hide();
 	$(".game-over-menu").addClass("game-over-menu-hidden");
 	showTopIcons();
 }
@@ -184,13 +210,15 @@ function generateScoreDisplay() {
 	const highscore = localStorage.getItem(highscoreKey);
 	if (highscore === null || score > parseInt(highscore)) {
 		localStorage.setItem(highscoreKey, score);
-		$("#score-wrap").append(`<p id="new-highscore-message">New highscore</p>`);
+		$("#score-wrap").append(`<p id="new-highscore-message">New personal best</p>`);
 	}
 }
 
 function showMainMenu() {
+	hideAllMenus();
 	$("#icon-bar-wrap").css("visibility", "hidden");
 	$("#board").hide();
+	$("#blocker").hide();
 	$("#piece-selection-wrap").hide();
 	$("#main-menu-wrap").show();
 	generateLevelSelect(0);

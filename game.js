@@ -24,6 +24,7 @@ function startGame(levelIndex) {
 		}
 	}
 
+	hideAllMenus();
 	$("#piece-selection-wrap").show();
 	$("#icon-bar-wrap").css("visibility", "visible");
 	$("#board").show();
@@ -191,20 +192,25 @@ function checkForWin() {
 	// they have won
 	$("#blocker").show();
 	stopTimer();
-	for (const cell of mineCells) {
-		cell.revealMine();
+
+	for (let i = 0; i < mineCells.length; i++) {
+		setTimeout(() => {
+			mineCells[i].revealMine();
+		}, i * 100);
 	}
-	setTimeout(showWinMenu, 2000);
+	setTimeout(showWinMenu, board.length * 100 + 2000);
 }
 
 function checkForLoss() {
 	for (const cell of mineCells) {
 		if (cell.hasPiece()) {
+			// they have lost
 			$("#blocker").show();
 			hideTopIcons();
 			stopTimer();
 			explodeMines(cell);
 			setTimeout(showLoseMenu, board.length * 160 + 2500);
+			return;
 		}
 	}
 }

@@ -125,4 +125,22 @@ const levels = [
 		maximumMinutes: 60,
 		color: "#cc1a06",
 	},
+	{
+		number: 15,
+		boardSize: 16,
+		pieces: { pawn: 20, rook: 14, knight: 18, king: 10, queen: 6, bishop: 14 },
+		numMines: 25,
+		baseScore: 3100,
+		maximumMinutes: 120,
+		color: "black",
+	},
+	{
+		number: 16,
+		boardSize: 16,
+		pieces: { pawn: 18, rook: 12, knight: 16, king: 8, queen: 6, bishop: 12 },
+		numMines: 40,
+		baseScore: 3200,
+		maximumMinutes: 120,
+		color: "black",
+	},
 ];

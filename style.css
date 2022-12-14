@@ -524,6 +524,11 @@ body {
 	background-color: var(--light-black-color);
 }
 
+#quit-menu {
+	width: 50%;
+	margin-top: 170px;
+}
+
 .game-over-menu {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
@@ -689,6 +694,10 @@ body {
 	-webkit-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
 	-moz-box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
 	box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, 0.35);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 #current-level-icon {
