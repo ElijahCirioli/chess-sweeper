@@ -9,6 +9,16 @@ function setupMenuEventListeners() {
 		}
 	});
 
+	// tutorial
+	$("#tutorial-button").on("click", function () {
+		showTutorial();
+	});
+
+	$("#tutorial-close-button").off("click");
+	$("#tutorial-close-button").on("click", function () {
+		showMainMenu();
+	});
+
 	// hint menu
 	$("#hint-button").on("click", function () {
 		$("#menu-wrap").show();
@@ -134,6 +144,8 @@ function hideAllMenus() {
 	$(".menu").hide();
 	$(".game-over-menu").hide();
 	$(".game-over-menu").addClass("game-over-menu-hidden");
+	$("#tutorial-wrap").hide();
+	$("#main-menu-wrap").hide();
 	showTopIcons();
 }
 
@@ -283,4 +295,13 @@ function generateLevelSelect(levelIndex) {
 	$("#next-level-button").on("click", function () {
 		generateLevelSelect(levelIndex + 1);
 	});
+}
+
+function showTutorial() {
+	hideAllMenus();
+	$("#icon-bar-wrap").css("visibility", "hidden");
+	$("#board").hide();
+	$("#blocker").hide();
+	$("#piece-selection-wrap").hide();
+	$("#tutorial-wrap").show();
 }

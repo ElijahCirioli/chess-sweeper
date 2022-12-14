@@ -775,3 +775,29 @@ body {
 	width: 37px;
 	height: 37px;
 }
+
+#tutorial-wrap {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 7px;
+	width: 360px;
+	height: 380px;
+	padding: 10px 20px;
+	background-color: var(--light-cell-color);
+	position: relative;
+}
+
+.tutorial-text {
+	font-family: "Martian Mono", monospace;
+	font-size: 0.68rem;
+	color: var(--black-color);
+	margin: 0;
+}
+
+#tutorial-image {
+	width: 94%;
+	height: auto;
+}
