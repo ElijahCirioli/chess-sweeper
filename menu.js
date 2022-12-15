@@ -146,7 +146,7 @@ function setupMenuEventListeners() {
 		hideTopIcons();
 		stopTimer();
 		explodeMines(mineCells[0]);
-		setTimeout(showLoseMenu, board.length * 160 + 2000);
+		setTimeout(showLoseMenu, mineCells.length * 160 + 2000);
 	});
 
 	// game over menus
