@@ -1,4 +1,5 @@
 function getMoves(type, cell) {
+	// call custom function based on piece type
 	switch (type) {
 		case "pawn":
 			return getMovesPawn(cell);
@@ -17,14 +18,17 @@ function getMoves(type, cell) {
 }
 
 function getMineCount(cell) {
+	// get the number of mines the piece on this cell can capture
 	return getCount(cell, "hasMine");
 }
 
 function getFlagCount(cell) {
+	// get the number of flags the piece on this cell can capture
 	return getCount(cell, "hasFlag");
 }
 
 function getVisibleMoves(cell) {
+	// get the moves for this cell but stop on flags
 	switch (cell.getPiece()) {
 		case "pawn":
 			return getMovesPawn(cell);
@@ -48,9 +52,11 @@ function getCount(cell, stopFunction) {
 	}
 
 	const type = cell.getPiece();
+	// pieces with a fixed number of moves
 	if (type === "pawn" || type === "knight" || type === "king") {
 		let count = 0;
 		const moves = getMoves(type, cell);
+		// check each move
 		for (const m of moves) {
 			if (board[m.y][m.x][stopFunction]()) {
 				count++;
@@ -59,6 +65,7 @@ function getCount(cell, stopFunction) {
 		return count;
 	}
 
+	// pieces that move in infinite lines
 	switch (type) {
 		case "bishop":
 			return getCountBishop(cell, stopFunction);
@@ -81,6 +88,7 @@ function canMove(x, y) {
 }
 
 function getLineMoves(moves, x, y, xDir, yDir, stopOnFlag) {
+	// get moves in a line in a certain direction
 	for (let i = 1; true; i++) {
 		const m = { x: x + i * xDir, y: y + i * yDir };
 		if (canMove(m.x, m.y)) {

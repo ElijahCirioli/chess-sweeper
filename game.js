@@ -1,22 +1,29 @@
-let board;
-let pieceCounts;
-let selectedPiece;
-let timerStart;
-let elapsedTime;
-let mineCells;
-let level;
+let board; // the grid of cells
+let pieceCounts; // the numbers of each piece available
+let selectedPiece; // the piece that the user is placing
+let timerStart; // the start time of the game
+let elapsedTime; // how much time has elapsed since that start time
+let mineCells; // a list of cells that are mines
+let level; // the current level
 
 function startGame(levelIndex) {
+	// load level information
 	level = JSON.parse(JSON.stringify(levels[levelIndex]));
 	pieceCounts = level.pieces;
 	pieceCounts.flag = level.numMines;
-	mineCells = [];
 
+	// add in scoring information
 	level.incorrectGuesses = 0;
 	level.hintMultiplier = 1;
+
+	// generate the board grid
 	generateBoard(level.boardSize);
+	// delay generating mines until after the first piece has been placed
+	mineCells = [];
+
 	startTimer();
 
+	// update the piece count elements
 	for (const type in pieceCounts) {
 		$(`#piece-selection-${type}`).children(".piece-selection-counter").text(pieceCounts[type]);
 		if (pieceCounts[type] > 0) {
@@ -24,6 +31,7 @@ function startGame(levelIndex) {
 		}
 	}
 
+	// update the div visibility
 	hideAllMenus();
 	$("#piece-selection-wrap").show();
 	$("#icon-bar-wrap").css("visibility", "visible");
@@ -35,8 +43,8 @@ function startGame(levelIndex) {
 
 function generateBoard(size) {
 	$(".cell").remove();
-	const divSize = $("#board").width();
-	const cellSize = divSize / size;
+
+	// generate the cells
 	board = [];
 	for (let y = 0; y < size; y++) {
 		let row = [];
@@ -45,6 +53,12 @@ function generateBoard(size) {
 		}
 		board.push(row);
 	}
+
+	// calculate sizes
+	const divSize = $("#board").width();
+	const cellSize = divSize / size;
+
+	// update css based on sizes
 	$("#board").css("grid-template-columns", `repeat(${size}, ${cellSize}px)`);
 	$("#board").css("grid-template-rows", `repeat(${size}, ${cellSize}px)`);
 
@@ -58,6 +72,8 @@ function generateBoard(size) {
 function generateMines(x, y) {
 	let mx, my;
 	for (let i = 0; i < level.numMines; i++) {
+		/* repeatedly generate new coordinates until they aren't a mine and they 
+		aren't x and y coordinates provided */
 		do {
 			mx = Math.floor(Math.random() * board.length);
 			my = Math.floor(Math.random() * board.length);
@@ -73,6 +89,7 @@ function setupEventListeners() {
 	$(".piece-selection").on("click dragstart", function () {
 		const type = $(this).attr("id").split("-")[2];
 
+		// unselect if this is selected already
 		if ($(this).hasClass("selected")) {
 			$(".piece-selection").removeClass("selected");
 			$(".cell").css("cursor", "default");
@@ -80,9 +97,11 @@ function setupEventListeners() {
 			return;
 		}
 
+		// make sure there are pieces of this type left
 		if (pieceCounts[type] <= 0) {
 			return;
 		}
+
 		selectedPiece = type;
 		$(".piece-selection").removeClass("selected");
 		$(this).addClass("selected");
@@ -147,10 +166,12 @@ function setupEventListeners() {
 			$("#preview-piece").show();
 		}
 	});
+
 	$("#board").on("mouseleave", function () {
 		$("#preview-piece").hide();
 		$(".cell").removeClass("highlight");
 	});
+
 	$("#board").on("mousemove", function (e) {
 		const rect = $("#board")[0].getBoundingClientRect();
 		const x = e.clientX - rect.left;
@@ -183,6 +204,7 @@ function highlightPossibleMoves(moves) {
 }
 
 function checkForWin() {
+	// check all mines for flags
 	for (const cell of mineCells) {
 		if (!cell.hasFlag()) {
 			return;
@@ -193,29 +215,38 @@ function checkForWin() {
 	$("#blocker").show();
 	stopTimer();
 
+	// reveal all the mines
 	for (let i = 0; i < mineCells.length; i++) {
 		setTimeout(() => {
 			mineCells[i].revealMine();
 		}, i * 100);
 	}
-	setTimeout(showWinMenu, board.length * 100 + 2000);
+
+	// show the win screen
+	setTimeout(showWinMenu, mineCells.length * 100 + 2000);
 }
 
 function checkForLoss() {
+	// check all the mines for pieces
 	for (const cell of mineCells) {
 		if (cell.hasPiece()) {
 			// they have lost
 			$("#blocker").show();
 			hideTopIcons();
 			stopTimer();
+
+			// explode all the mines
 			explodeMines(cell);
-			setTimeout(showLoseMenu, board.length * 160 + 2500);
+
+			// show the lose screen
+			setTimeout(showLoseMenu, mineCells.length * 160 + 2000);
 			return;
 		}
 	}
 }
 
 function explodeMines(cell) {
+	// sort the mines based on how close they are
 	mineCells.sort((a, b) => {
 		const distA = Math.pow(cell.getX() - a.getX(), 2) + Math.pow(cell.getY() - a.getY(), 2);
 		const distB = Math.pow(cell.getX() - b.getX(), 2) + Math.pow(cell.getY() - b.getY(), 2);

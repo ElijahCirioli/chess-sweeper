@@ -1,12 +1,12 @@
 class Cell {
 	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-		this.piece;
+		this.x = x; // the x coordinate of the cell
+		this.y = y; // the y coordinate of the cell
+		this.piece; // the type of piece placed on this cell
 
-		this.hasMineBool = false;
-		this.hasFlagBool = false;
-		this.marking = 0;
+		this.hasMineBool = false; // whether this cell is a mine
+		this.hasFlagBool = false; // whether this cell has a flag
+		this.marking = 0; // what notes are on this cell (0 = none, 1 = safe, 2 = flag)
 
 		this.generateElement();
 		this.setupEventListeners();
@@ -34,13 +34,16 @@ class Cell {
 				selectedPiece !== "safeNote" &&
 				selectedPiece !== "flagNote"
 			) {
+				// allow the piece to be dropped
 				e.preventDefault();
 			}
 
 			let moves;
 			if (self.piece && !self.hasFlagBool) {
+				// moves of piece that is in this cell
 				moves = getMoves(self.piece, self);
 			} else if (selectedPiece) {
+				// moves of the piece the user is holding
 				moves = getMoves(selectedPiece, self);
 			} else {
 				$(".cell").removeClass("highlight");
@@ -79,6 +82,7 @@ class Cell {
 			$(".cell").removeClass("menu-selected");
 			self.element.removeClass("hint-highlight");
 
+			// place if we can
 			if (
 				!self.hasFlagBool &&
 				!self.piece &&
@@ -111,6 +115,7 @@ class Cell {
 				.children(".context-button-text")
 				.text(self.marking === 2 ? "Unmark flag" : "Mark flag");
 
+			// make it visible
 			$("#context-menu").css("display", "flex");
 			$(".cell").removeClass("menu-selected");
 			self.element.addClass("menu-selected");
@@ -147,7 +152,7 @@ class Cell {
 				self.removeFlag();
 			} else {
 				if (mineCells.length === 0) {
-					generateMines(this.x, this.y);
+					generateMines(-1, -1);
 				}
 				pieceCounts.flag--;
 				$("#piece-selection-flag").children(".piece-selection-counter").text(pieceCounts.flag);
@@ -198,10 +203,7 @@ class Cell {
 	}
 
 	placePiece() {
-		if (mineCells.length === 0) {
-			generateMines(this.x, this.y);
-		}
-
+		// special case for dragging a flag from one cell to another
 		if (selectedPiece && selectedPiece.startsWith("flagMove")) {
 			const [fromX, fromY] = selectedPiece.split(":").slice(1);
 			board[fromY][fromX].getElement().children(".piece-image").attr("draggable", "false");
@@ -209,6 +211,16 @@ class Cell {
 			selectedPiece = "flag";
 		}
 
+		if (mineCells.length === 0) {
+			if (selectedPiece === "flag") {
+				generateMines(-1, -1);
+			} else {
+				// generate the mines avoiding this cell
+				generateMines(this.x, this.y);
+			}
+		}
+
+		// update piece count
 		pieceCounts[selectedPiece]--;
 		$(`#piece-selection-${selectedPiece}`)
 			.children(".piece-selection-counter")
@@ -219,10 +231,12 @@ class Cell {
 				.attr("draggable", "false");
 		}
 
+		// create the piece image
 		this.element.children(".piece-image").attr("src", `images/${selectedPiece}.png`);
 		this.element.children(".piece-image").show();
 		this.element.children(".piece-image").off("dragstart");
 		if (selectedPiece === "flag") {
+			// placing a flag
 			this.hasFlagBool = true;
 			this.element.children(".piece-image").css("cursor", "pointer");
 			this.marking = 0;
@@ -244,15 +258,24 @@ class Cell {
 				$(".cell").removeClass("menu-selected");
 			});
 
+			// see if the user has won
 			checkForWin();
 		} else {
+			// placing a regular piece
 			this.piece = selectedPiece;
+			// see if the user has lost
 			checkForLoss();
 		}
+
+		// update counts for all pieces
 		updateAllMineCounts();
+
 		this.marking = 0;
+
+		// unselect piece tool
 		selectedPiece = undefined;
 		$(".piece-selection").removeClass("selected");
+
 		$(".cell").css("cursor", "default");
 		$("#preview-piece").hide();
 	}
@@ -268,19 +291,25 @@ class Cell {
 
 	mark(type) {
 		if (type === "safeNote") {
+			// safe marking
 			if (this.marking === 1) {
+				// unmark
 				this.element.children(".piece-image").hide();
 				this.marking = 0;
 			} else {
+				// mark
 				this.element.children(".piece-image").attr("src", "images/check-outline.svg");
 				this.element.children(".piece-image").show();
 				this.marking = 1;
 			}
 		} else {
+			// flag marking
 			if (this.marking === 2) {
+				// unmark
 				this.element.children(".piece-image").hide();
 				this.marking = 0;
 			} else {
+				// mark
 				this.element.children(".piece-image").attr("src", "images/note-flag-outline.svg");
 				this.element.children(".piece-image").show();
 				this.marking = 2;
@@ -296,12 +325,14 @@ class Cell {
 
 		const count = getMineCount(this);
 		if (count === 0) {
+			// hiden number if it's 0
 			this.element.children(".piece-mine-number").hide();
 		} else {
 			this.element.children(".piece-mine-number").show();
 			this.element.children(".piece-mine-number").text(count);
 		}
 
+		// remove hint highlight if this number has changed
 		if (this.element.hasClass("hint-highlight")) {
 			if (count === getFlagCount(this)) {
 				this.element.removeClass("hint-highlight");

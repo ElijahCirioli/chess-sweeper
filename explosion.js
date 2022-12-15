@@ -3,15 +3,17 @@ let explosionParticles = [];
 
 class ExplosionParticle {
 	constructor(x, y, energy, explosionRadius) {
-		this.x = x;
-		this.y = y;
+		this.x = x; // the x position of this particle
+		this.y = y; // the y position of this particle
 
 		const angle = Math.random() * 2 * Math.PI;
 		const speed = (energy * explosionRadius) / 50 + Math.random() * 0.4 + 0.5;
-		this.velX = speed * Math.cos(angle);
-		this.velY = speed * Math.sin(angle);
-		this.radius = Math.ceil((1 - energy) * 16) + 4;
-		this.life = (1 - energy) * 60 + 30;
+		this.velX = speed * Math.cos(angle); // the x velocity of this particle
+		this.velY = speed * Math.sin(angle); // the y velocity of this particle
+		this.radius = Math.ceil((1 - energy) * 16) + 4; // the radius of this particle
+		this.life = (1 - energy) * 60 + 30; // how many frames this particle will live for
+
+		// set the particle color based on its energy
 		if (energy < 0.2) {
 			this.color = "#757068";
 		} else if (energy < 0.4) {
@@ -76,6 +78,8 @@ function updateExplosion() {
 		const p = explosionParticles[i];
 		p.draw(context);
 		p.move();
+
+		// check if the particle has died
 		p.life--;
 		if (p.life <= 0) {
 			explosionParticles.splice(i, 1);
@@ -83,6 +87,7 @@ function updateExplosion() {
 		}
 	}
 
+	// keep simulating if there are particles remaining
 	if (explosionParticles.length > 0) {
 		requestAnimationFrame(updateExplosion);
 	} else {

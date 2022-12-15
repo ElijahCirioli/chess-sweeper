@@ -1,10 +1,15 @@
 function setupMenuEventListeners() {
+	// closing a menu
 	$(".menu-close-button").on("click", function () {
 		hideAllMenus();
 	});
 
+	// hide menu when looking at the background
 	$("#menu-wrap").on("click", function (e) {
-		if (e.target === e.currentTarget && $("#hint-menu").css("display") !== "none") {
+		if (
+			e.target === e.currentTarget &&
+			($("#hint-menu").css("display") !== "none" || $("#quit-menu").css("display") !== "none")
+		) {
 			hideAllMenus();
 		}
 	});
@@ -30,6 +35,8 @@ function setupMenuEventListeners() {
 	$("#hint-contradiction-button").on("click", function () {
 		hideAllMenus();
 		$(".cell").removeClass("hint-highlight");
+
+		// highlight contradictions
 		for (const row of board) {
 			for (const cell of row) {
 				if (cell.hasPiece() && getMineCount(cell) !== getFlagCount(cell)) {
@@ -42,11 +49,14 @@ function setupMenuEventListeners() {
 
 	$("#hint-blind-spots-button").on("click", function () {
 		hideAllMenus();
+
 		const covered = [];
 		for (const row of board) {
 			const coveredRow = [];
 			for (const cell of row) {
 				coveredRow.push(cell.hasPiece() || cell.hasFlag());
+
+				// unmark this piece if it's been marked previously
 				if (cell.getElement().hasClass("hint-highlight") && cell.getMarking() === 2) {
 					cell.mark("flagNote");
 				}
@@ -55,6 +65,7 @@ function setupMenuEventListeners() {
 		}
 		$(".cell").removeClass("hint-highlight");
 
+		// mark all spots as covered or not
 		for (const row of board) {
 			for (const cell of row) {
 				if (!cell.hasPiece()) {
@@ -68,6 +79,7 @@ function setupMenuEventListeners() {
 			}
 		}
 
+		// highlight which spots are not covered
 		for (const row of board) {
 			for (const cell of row) {
 				if (!covered[cell.getY()][cell.getX()]) {
@@ -83,9 +95,13 @@ function setupMenuEventListeners() {
 
 	$("#hint-correct-button").on("click", function () {
 		hideAllMenus();
+
+		// generate the mines if they haven't been already
 		if (mineCells.length === 0) {
 			generateMines(-1, -1);
 		}
+
+		// reveal mines if they have a flag on them
 		for (const cell of mineCells) {
 			if (cell.hasFlag()) {
 				cell.revealMine();
@@ -96,9 +112,13 @@ function setupMenuEventListeners() {
 
 	$("#hint-reveal-button").on("click", function () {
 		hideAllMenus();
+
+		// generate the mines if they haven't been already
 		if (mineCells.length === 0) {
 			generateMines(-1, -1);
 		}
+
+		// reveal a mine that hasn't been revealed yet
 		for (const cell of mineCells) {
 			if (!cell.hasFlag() && !cell.getElement().hasClass("mine")) {
 				cell.revealMine();
@@ -126,7 +146,7 @@ function setupMenuEventListeners() {
 		hideTopIcons();
 		stopTimer();
 		explodeMines(mineCells[0]);
-		setTimeout(showLoseMenu, board.length * 160 + 2500);
+		setTimeout(showLoseMenu, board.length * 160 + 2000);
 	});
 
 	// game over menus
@@ -182,11 +202,13 @@ function generateScoreDisplay() {
 	$(".score-row").remove();
 	$("#new-highscore-message").remove();
 
+	// base score
 	let score = level.baseScore;
 	$("#score-wrap").append(
 		`<div class="score-row"><p>Level ${level.number} complete:</p><p>${score}</p></div>`
 	);
 
+	// time bonus
 	let timeBonus = 0;
 	if (elapsedTime < level.maximumMinutes * 60) {
 		timeBonus = Math.ceil((level.maximumMinutes * 60 - elapsedTime) * 5);
@@ -194,6 +216,7 @@ function generateScoreDisplay() {
 	score += timeBonus;
 	$("#score-wrap").append(`<div class="score-row"><p>Time bonus:</p><p>+${timeBonus}</p></div>`);
 
+	// extra pieces bonus
 	let pieceBonus = 0;
 	for (const piece in pieceCounts) {
 		pieceBonus += pieceCounts[piece];
@@ -202,12 +225,14 @@ function generateScoreDisplay() {
 	score += pieceBonus;
 	$("#score-wrap").append(`<div class="score-row"><p>Extra pieces bonus:</p><p>+${pieceBonus}</p></div>`);
 
+	// incorrect guessing penalty
 	let guessingPenalty = Math.min(100 * level.incorrectGuesses, score);
 	$("#score-wrap").append(
 		`<div class="score-row"><p>Guessing penalty:</p><p>-${guessingPenalty}</p></div>`
 	);
 	score -= guessingPenalty;
 
+	// hint multiplier
 	if (level.hintMultiplier !== 1) {
 		level.hintMultiplier = Math.round(Math.max(0.1, level.hintMultiplier) * 100) / 100;
 		score = Math.round(score * level.hintMultiplier);
@@ -218,6 +243,7 @@ function generateScoreDisplay() {
 
 	$("#score-wrap").append(`<div class="score-row"><p><b>Total:</b></p><p><b>${score}</b></p></div>`);
 
+	// check if this is a new highscore
 	const highscoreKey = `elijah-cirioli-chess-sweeper-highscore-level-${level.number}`;
 	const highscore = localStorage.getItem(highscoreKey);
 	if (highscore === null || score > parseInt(highscore)) {
@@ -285,6 +311,10 @@ function generateLevelSelect(levelIndex) {
 	// event listeners
 	$("#start-game-button").off("click");
 	$("#start-game-button").on("click", function () {
+		startGame(levelIndex);
+	});
+
+	$("#current-level-icon").on("click", function () {
 		startGame(levelIndex);
 	});
 
